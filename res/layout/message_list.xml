@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"  
+    xmlns:app="http://schemas.android.com/apk/res-auto"  
+    android:id="@+id/rly_content"  
+    android:layout_width="match_parent"  
+    android:layout_height="match_parent"  
+    android:clipChildren="false"  
+    android:clipToPadding="false"  
+    android:orientation="vertical"  
+    android:paddingBottom="4dp"  
+    android:descendantFocusability="beforeDescendants"  
+     android:paddingLeft="8dip"  
+    android:paddingRight="8dip"  
+    android:paddingTop="6dp" >  
+  
+    <LinearLayout  
+        android:layout_width="match_parent"  
+        android:layout_height="wrap_content"  
+        android:background="@color/snow"  
+        android:orientation="vertical"  
+		 >  
+  
+        <RelativeLayout  
+            android:layout_width="match_parent"  
+            android:layout_height="wrap_content" >  
+  
+            <com.sdf.simplebeautyweibo.widget.RoundImageView  
+                android:id="@+id/iv_head"  
+                android:layout_width="42dip"  
+                android:layout_height="42dip"  
+                android:layout_marginRight="8dip" />  
+  
+            <TextView  
+                android:id="@+id/tv_name"  
+                android:layout_width="wrap_content"  
+                android:layout_height="wrap_content"  
+                android:layout_toRightOf="@id/iv_head"  
+                android:text="名字" />  
+  
+            <TextView  
+                android:id="@+id/tv_time"   
+                android:layout_width="wrap_content"  
+                android:layout_height="wrap_content"  
+                android:layout_below="@id/tv_name"  
+                android:layout_marginTop="2dip"  
+                android:layout_toRightOf="@id/iv_head"  
+                android:text="来自简美微博 2015-01-26" />  
+  
+         
+            <TextView  
+                android:id="@+id/tv_content"  
+                android:layout_width="match_parent"  
+                android:layout_height="wrap_content"  
+                android:layout_below="@id/iv_head"  
+                android:layout_marginBottom="4dip"  
+                android:layout_marginTop="10dip"  
+                android:lineSpacingExtra="2dip"  
+                android:text="哈哈，我今天发了条微博" />  
+  
+            <!-- android:background="@drawable/timeline_profile_question_single_normal" -->  
+  
+            <RelativeLayout  
+                android:id="@+id/layRe"  
+                android:layout_width="match_parent"  
+                android:layout_height="wrap_content"  
+                android:layout_below="@id/tv_content"  
+                android:layout_marginLeft="-10dip"  
+                android:layout_marginRight="-10dip"  
+                android:orientation="vertical"  
+                android:paddingBottom="4dip"  
+                android:paddingLeft="10dip"  
+                android:paddingRight="10dip" >  
+  
+                <View  
+                    android:id="@+id/view_line"  
+                    android:layout_width="match_parent"  
+                    android:layout_height="1.5dip"  
+                    android:layout_marginBottom="8dip"  
+                    android:background="@color/snow" />  
+  
+                <TextView  
+                    android:id="@+id/tv_recontent"   
+                    android:layout_width="match_parent"  
+                    android:layout_height="wrap_content"  
+                    android:layout_below="@id/view_line"  
+                    android:lineSpacingExtra="2dip" />  
+            </RelativeLayout>  
+        </RelativeLayout>  
+  
+        <!-- 展示图片 -->  
+        <com.sdf.simplebeautyweibo.widget.NineGridImageView  
+            android:id="@+id/grid_image"  
+            android:layout_width="match_parent"  
+            android:layout_height="wrap_content"  
+            android:visibility="gone"  
+             />  
+  
+        <RelativeLayout  
+            android:layout_width="match_parent"  
+            android:layout_height="35dip"  
+            android:clipChildren="false"  
+            android:clipToPadding="false"  
+            android:gravity="center_vertical"  
+            android:orientation="horizontal" >  
+  
+            <LinearLayout  
+                android:id="@+id/lly_like"  
+                android:layout_width="wrap_content"  
+                android:layout_height="wrap_content"  
+                android:layout_marginTop="0dip"  
+                android:gravity="center"  
+                android:orientation="horizontal"  
+                android:paddingBottom="2dip" >  
+  
+                <ImageView  
+                    android:id="@+id/iv_like"  
+                    android:layout_width="24dip"  
+                    android:layout_height="20dip"  
+                    android:src="@drawable/tempp" />  
+  
+                <TextView  
+                    android:id="@+id/tv_like"  
+                    android:layout_width="wrap_content"  
+                    android:layout_height="wrap_content"  
+                    android:paddingTop="4dip"  
+                    android:text="1人赞了"  
+                    android:textColor="@color/blanchedalmond"  
+                    android:textSize="12sp" />  
+            </LinearLayout>  
+  
+            <LinearLayout  
+                android:id="@+id/lly_comment"  
+                android:layout_width="wrap_content"  
+                android:layout_height="wrap_content"  
+                android:layout_alignParentRight="true"  
+                android:gravity="center"  
+                android:orientation="horizontal" >  
+  
+                <ImageView  
+                    android:layout_width="24dip"  
+                    android:layout_height="20dip"  
+                    android:src="@drawable/tempp" />  
+  
+                <TextView  
+                    android:id="@+id/tv_comment"  
+                    android:layout_width="wrap_content"  
+                    android:layout_height="wrap_content"  
+                    android:text="100"  
+                    android:textColor="@color/blueviolet"  
+                    android:textSize="12sp" />  
+            </LinearLayout>  
+  
+            <LinearLayout  
+                android:id="@+id/lly_repost"  
+                android:layout_width="wrap_content"  
+                android:layout_height="wrap_content"  
+                android:layout_marginRight="10dip"  
+                android:layout_toLeftOf="@id/lly_comment"  
+                android:gravity="center"  
+                android:orientation="horizontal" >  
+  
+                <ImageView  
+                    android:layout_width="24dip"  
+                    android:layout_height="20dip"  
+                    android:src="@drawable/tempp" />  
+  
+                <TextView  
+                    android:id="@+id/tv_repost"  
+                    android:layout_width="wrap_content"  
+                    android:layout_height="wrap_content"  
+                    android:text="100"  
+                    android:textColor="@color/blanchedalmond"  
+                    android:textSize="12sp" />  
+            </LinearLayout>  
+        </RelativeLayout>  
+    </LinearLayout>  
+  
+    <ImageView  
+        android:id="@+id/iv_menu"  
+        android:layout_width="40dip"  
+        android:layout_height="40dip"  
+        android:layout_alignParentRight="true"  
+        android:paddingBottom="8dip"  
+        android:src="@drawable/tempp" />  
+  
+</RelativeLayout> 

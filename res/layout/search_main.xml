@@ -1,0 +1,87 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" 
+    android:background="@color/snow"
+    tools:context="com.example.viewpagertest.SearchMainActivity" >
+
+    
+    <android.support.v7.widget.Toolbar
+	  android:id="@+id/toolbar"
+	  android:layout_height="wrap_content"
+	  android:layout_width="fill_parent"
+	  android:paddingRight="10dp"
+	  android:background="#cc0000"
+	   >
+	   	
+      	<ImageView
+        android:id="@+id/searchImageExit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/abc_btn_switch_to_on_mtrl_00012" 
+        android:paddingRight="10dp"
+        />
+        <com.example.viewpagertest.ClearEditText
+            android:id="@+id/Editsearch"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:hint="暂无数据..."
+	        android:theme="@style/MyEditText"
+	        android:drawableRight="@+drawable/abc_btn_check_material"
+	        android:singleLine="true"
+	        android:imeOptions="actionSearch"
+	        android:background="@drawable/edit_tool_line"
+	        android:drawable="@color/floralwhite">
+            
+            </com.example.viewpagertest.ClearEditText>
+        
+	</android.support.v7.widget.Toolbar>
+
+    
+
+	<RelativeLayout
+	    android:id="@+id/historyLayout"
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent" 
+	    >
+	    <ListView
+	        android:id="@+id/listSearch"
+	        android:layout_width="fill_parent"
+	    	android:layout_height="wrap_content"
+	    	>
+	    </ListView>
+	    
+	    <TextView
+		    android:id="@+id/SearchTime"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:text="00：00" 
+		    android:layout_centerInParent="true"
+		    android:textColor="@color/dimgray"
+		    android:textStyle="bold"  
+			android:typeface="monospace"  
+		    android:textSize="50dp"/>
+	    
+	   
+	
+	    <LinearLayout
+	        android:id="@+id/SoundLayout"
+	        android:layout_width="fill_parent"
+	    	android:layout_height="wrap_content" 
+	    	android:layout_alignParentBottom="true"
+        	android:layout_marginBottom="10dp"
+        	android:gravity="center"
+        	android:paddingBottom="0dp"
+	    >
+		<ImageView
+		   	android:id="@+id/soundRecord"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:src="@drawable/menu_show_all_audio"
+        	
+		    ></ImageView>
+		    </LinearLayout>
+	</RelativeLayout>
+	    
+</LinearLayout>
