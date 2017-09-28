@@ -125,15 +125,13 @@ public class DrawWaveForm extends View
 	
 	private Context context;
 	private View view;
-	public DrawWaveForm(Context context, AttributeSet attrs,View view) {
+	public DrawWaveForm(Context context, AttributeSet attrs,View view,String path) {
 		super(context, attrs);
 		this.context=context;
 		this.view=view;
-		view.setFocusable(true);  
-		view.setFocusableInTouchMode(true);  
-		view.requestFocus();
+	
 		// TODO Auto-generated constructor stub
-		mFilename = "/storage/emulated/0/aaaa.mp3";
+		mFilename = path;
 		mHandler = new Handler();
 
         loadGui();
@@ -177,7 +175,18 @@ public class DrawWaveForm extends View
 //        mZoomOutButton.setOnClickListener(mZoomOutListener);
         mSaveButton = (ImageButton)view.findViewById(R.id.save);
 //        mSaveButton.setOnClickListener(mSaveListener);
-
+        mSaveButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				mFilename = "/storage/emulated/0/bbbb.mp3";
+				if (mPlayer != null && mPlayer.isPlaying()) {
+					mPlayer.stop();
+		        }
+				loadFromFile();
+			}
+		});
         TextView markStartButton = (TextView) view.findViewById(R.id.mark_start);
 //        markStartButton.setOnClickListener(mMarkStartListener);
         TextView markEndButton = (TextView) view.findViewById(R.id.mark_end);
@@ -216,6 +225,7 @@ public class DrawWaveForm extends View
 	mEndVisible = true;
 
         updateDisplay();
+        mProgressDialog = new ProgressDialog(context);
     }
 
 	private String getExtensionFromFilename(String filename) {
@@ -238,7 +248,7 @@ public class DrawWaveForm extends View
 
         mLoadingLastUpdateTime = System.currentTimeMillis();
         mLoadingKeepGoing = true;
-        mProgressDialog = new ProgressDialog(context);
+        
         mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         mProgressDialog.setTitle(R.string.progress_dialog_loading);
         mProgressDialog.setCancelable(true);
@@ -327,17 +337,17 @@ public class DrawWaveForm extends View
                 } catch (final Exception e) {
                     mProgressDialog.dismiss();
                     e.printStackTrace();
-                    mInfo.setText(e.toString());
-
-                    Runnable runnable = new Runnable() {
-                            public void run() {
-                                handleFatalError(
-                                  "ReadError",
-                                  getResources().getText(R.string.read_error),
-                                  e);
-                            }
-                        };
-                    mHandler.post(runnable);
+//                    mInfo.setText(e.toString());
+//
+//                    Runnable runnable = new Runnable() {
+//                            public void run() {
+//                                handleFatalError(
+//                                  "ReadError",
+//                                  getResources().getText(R.string.read_error),
+//                                  e);
+//                            }
+//                        };
+//                    mHandler.post(runnable);
                     return;
                 }
                 mProgressDialog.dismiss(); 
@@ -533,6 +543,8 @@ public class DrawWaveForm extends View
         mIsPlaying = false;
         enableDisableButtons();
     }
+    
+    
 
     //“Ù¿÷≤•∑≈
     private synchronized void onPlay(int startPosition) {
@@ -850,7 +862,14 @@ public class DrawWaveForm extends View
 	@Override
 	public void waveformDraw() {
 		// TODO Auto-generated method stub
-		
+		mWidth = mWaveformView.getMeasuredWidth();
+        if (mOffsetGoal != mOffset && !mKeyDown)
+            updateDisplay();
+        else if (mIsPlaying) {
+            updateDisplay();
+        } else if (mFlingVelocity != 0) {
+            updateDisplay();
+        }
 	}
 
 	@Override

@@ -92,7 +92,9 @@ public class MainChooseActivity extends ViewGroup {
 		mPager.setCurrentItem(0);   
 		
 		SoundRecord tt =new SoundRecord(listViews.get(0).getContext(), null,listViews.get(0));
-		DrawWaveForm t2 =new DrawWaveForm(listViews.get(1).getContext(), null,listViews.get(1));
+		DrawWaveForm t2 =new DrawWaveForm(listViews.get(1).getContext(), null,listViews.get(1),"/storage/emulated/0/aaaa.mp3");
+		
+		//t2 =new DrawWaveForm(listViews.get(1).getContext(), null,listViews.get(1),"/storage/emulated/0/bbbb.mp3");
 		mPager.setOnPageChangeListener(new MyOnPageChangeListener()); 
 		
 		

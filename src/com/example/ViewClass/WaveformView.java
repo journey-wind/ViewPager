@@ -70,10 +70,12 @@ public class WaveformView extends View {
         // We don't want keys, the markers get these
         setFocusable(false);
 
+        
         mGridPaint = new Paint();
         mGridPaint.setAntiAlias(false);
         mGridPaint.setColor(
             getResources().getColor(R.drawable.grid_line));
+        
         mSelectedLinePaint = new Paint();
         mSelectedLinePaint.setAntiAlias(false);
         mSelectedLinePaint.setColor(
@@ -405,6 +407,7 @@ public class WaveformView extends View {
      * Called once when a new sound file is added
      */
     private void computeDoublesForAllZoomLevels() {
+    	
         int numFrames = mSoundFile.getNumFrames();
         int[] frameGains = mSoundFile.getFrameGains();
         double[] smoothedGains = new double[numFrames];
