@@ -25,6 +25,7 @@ public class MainActivity extends ActionBarActivity {
      private List<View> listViewsMain; // Tab页面列表
      private TextView t1Main,t2Main;// 页卡头标
      private MainChooseActivity mca;
+     public static String firstMisicPath;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

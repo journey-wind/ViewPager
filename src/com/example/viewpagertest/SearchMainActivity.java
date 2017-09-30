@@ -58,7 +58,7 @@ import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 import android.widget.ZoomControls;
 
-public class SearchMainActivity extends Activity implements Callback {
+public class SearchMainActivity extends Activity implements Callback , OnItemClickListener{
 
 	public static Handler hand;
 	private TimerCal timerT;
@@ -70,7 +70,7 @@ public class SearchMainActivity extends Activity implements Callback {
 	private TextView RecordTime;
 	private ListView listView;
 	private ClearEditText editSearch;
-	private ArrayList<String> frequencyList;
+	public static ArrayList<String> frequencyList;
 	private SearchListViewAdapter historyAdapter;
 	private RelativeLayout historyLayout;
 //	private LinearLayout resultLayout;
@@ -102,6 +102,7 @@ public class SearchMainActivity extends Activity implements Callback {
 		
         historyAdapter =new SearchListViewAdapter(this, frequencyList , this); 
         listView.setAdapter(historyAdapter);
+        listView.setOnItemClickListener(this);
         
         imageExit.setOnClickListener(new OnClickListener() {
 			
@@ -164,6 +165,7 @@ public class SearchMainActivity extends Activity implements Callback {
 					case MotionEvent.ACTION_CANCEL:
 					case MotionEvent.ACTION_UP:
 						RecordTime.setVisibility(View.GONE);
+						soundAdd.setVisibility(View.GONE);
 						isLoopText=false;
 						isPressImage =false;
 						RecordTime.setText("00£º00");
@@ -361,7 +363,7 @@ public class SearchMainActivity extends Activity implements Callback {
            
        	MediaFileType MimeType = MediaFile.getFileType(f.getAbsolutePath());
        	if(MimeType != null){
-	            if(MediaFile.isAudioFileType(MimeType.fileType)){
+	            if(MediaFile.isMP3FileType(MimeType.fileType)){
 	            	fileList.add(f.getAbsolutePath());  
 	            }
        	}
@@ -445,5 +447,19 @@ public class SearchMainActivity extends Activity implements Callback {
 		// TODO Auto-generated method stub
 		frequencyList.remove(Integer.parseInt(v.getTag().toString()));
 		historyAdapter.notifyDataSetChanged();
+		
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+		// TODO Auto-generated method stub
+		MainActivity.firstMisicPath=frequencyList.get(arg2);
+		Message msg = new Message(); 
+        Bundle b = new Bundle();
+        b.putInt("FileChange", arg2);
+        msg.setData(b);
+        MainChooseActivity.changeFile.sendMessage(msg);
+		this.finish();
+		
 	}
 }

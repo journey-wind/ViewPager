@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Paint;
 import android.graphics.Typeface;
@@ -54,9 +55,17 @@ public class SearchListViewAdapter extends BaseAdapter implements OnClickListene
 		// TODO Auto-generated method stub
 		arg1=mInflater.inflate(R.layout.search_list, null);
 		TextView tv1 =(TextView)arg1.findViewById(R.id.textView1);
+		TextView tv2 =(TextView)arg1.findViewById(R.id.searchAuthor);
 		ImageView imgv =(ImageView)arg1.findViewById(R.id.imageView2);
 		imgv.setOnClickListener(this);
-		tv1.setText(data.get(arg0));
+		
+		String mFilename=data.get(arg0);
+		SongMetadataReader metadataReader = new SongMetadataReader((Activity) arg1.getContext(), mFilename);
+        String mTitle = metadataReader.mTitle;
+        String mArtist = metadataReader.mArtist;
+        
+		tv1.setText(mTitle);
+		tv2.setText(mArtist);
 		Paint mp = new Paint();
 		Typeface font = Typeface.create(Typeface.SERIF, Typeface.NORMAL);
 		tv1.setTypeface(font);

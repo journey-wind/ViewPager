@@ -22,7 +22,7 @@
         android:src="@drawable/abc_btn_switch_to_on_mtrl_00012" 
         android:paddingRight="10dp"
         />
-        <com.example.viewpagertest.ClearEditText
+        <com.example.ViewClass.ClearEditText
             android:id="@+id/Editsearch"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
@@ -34,7 +34,7 @@
 	        android:background="@drawable/edit_tool_line"
 	        android:drawable="@color/floralwhite">
             
-            </com.example.viewpagertest.ClearEditText>
+            </com.example.ViewClass.ClearEditText>
         
 	</android.support.v7.widget.Toolbar>
 
@@ -52,36 +52,39 @@
 	    	>
 	    </ListView>
 	    
-	    <TextView
-		    android:id="@+id/SearchTime"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:text="00：00" 
-		    android:layout_centerInParent="true"
-		    android:textColor="@color/dimgray"
-		    android:textStyle="bold"  
-			android:typeface="monospace"  
-		    android:textSize="50dp"/>
+
+		    <TextView
+			    android:id="@+id/SearchTime"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:text="00：00" 
+			    android:layout_centerInParent="true"
+			    android:textColor="@color/dimgray"
+			    android:textStyle="bold"  
+				android:typeface="monospace"  
+			    android:textSize="50dp"
+			    android:visibility="gone"/>
 	    
 	   
 	
-	    <LinearLayout
-	        android:id="@+id/SoundLayout"
-	        android:layout_width="fill_parent"
-	    	android:layout_height="wrap_content" 
-	    	android:layout_alignParentBottom="true"
-        	android:layout_marginBottom="10dp"
-        	android:gravity="center"
-        	android:paddingBottom="0dp"
-	    >
-		<ImageView
-		   	android:id="@+id/soundRecord"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:src="@drawable/menu_show_all_audio"
-        	
-		    ></ImageView>
-		    </LinearLayout>
+		    <LinearLayout
+		        android:id="@+id/SoundLayout"
+		        android:layout_width="fill_parent"
+		    	android:layout_height="wrap_content" 
+		    	android:layout_alignParentBottom="true"
+	        	android:layout_marginBottom="10dp"
+	        	android:gravity="center"
+	        	android:paddingBottom="0dp"
+		    >
+				<ImageView
+				   	android:id="@+id/soundRecord"
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:src="@drawable/menu_show_all_audio"
+				    android:visibility="gone"
+		        ></ImageView>
+			</LinearLayout>
+		
 	</RelativeLayout>
 	    
 </LinearLayout>

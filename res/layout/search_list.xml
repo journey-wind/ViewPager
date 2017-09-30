@@ -4,8 +4,10 @@
     android:layout_height="wrap_content"
     android:background="@color/snow"
     android:gravity="center_horizontal"
+    android:descendantFocusability="blocksDescendants"
     android:orientation="horizontal"
-    android:layout_gravity="center_horizontal" >
+    android:layout_gravity="center_horizontal"
+     >
 
     <ImageView
         android:id="@+id/imageView1"
@@ -26,7 +28,7 @@
 	    <TextView
 	        android:id="@+id/textView1"
 	        android:layout_width="match_parent"
-	        android:layout_height="35dp"
+	        android:layout_height="25dp"
 	        android:layout_marginTop="10dp"
 	        android:layout_weight="0.40"
 
@@ -36,7 +38,7 @@
 	    <TextView
 	        android:id="@+id/searchAuthor"
 	        android:layout_width="match_parent"
-	        android:layout_height="35dp"
+	        android:layout_height="25dp"
 	        android:layout_marginTop="10dp"
 	        android:layout_weight="0.40"
 	        android:background="@drawable/view_line"
@@ -51,6 +53,8 @@
         android:layout_height="fill_parent"
         android:layout_marginTop="0dp"
         android:scaleType="center"
-        android:src="@drawable/@android:drawable/ic_menu_sort_by_size" />
+        android:src="@drawable/@android:drawable/ic_menu_sort_by_size" 
+        />
 
+    
 </LinearLayout>

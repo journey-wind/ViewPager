@@ -131,6 +131,9 @@ public class MediaFile {
                 (fileType >= FIRST_MIDI_FILE_TYPE &&  
                 fileType <= LAST_MIDI_FILE_TYPE));  
     }  
+    public static boolean isMP3FileType(int fileType) {  
+        return (fileType == FILE_TYPE_MP3);  
+    }  
       
     public static boolean isVideoFileType(int fileType) {  
         return (fileType >= FIRST_VIDEO_FILE_TYPE &&  

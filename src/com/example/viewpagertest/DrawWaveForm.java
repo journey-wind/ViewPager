@@ -91,6 +91,7 @@ public class DrawWaveForm extends View
 	    private int mMarkerTopOffset;
 	    private int mMarkerBottomOffset;
 
+	    private int musicArrIndex;
 	    /**
 	     * This is a special intent action that means "edit a sound file".
 	     */
@@ -138,10 +139,35 @@ public class DrawWaveForm extends View
 
         mHandler.postDelayed(mTimerRunnable, 100);
 
-        if (!mFilename.equals("record")) {
+        if (!(mFilename==null || mFilename.equals(""))) {
             loadFromFile();
         }
 		
+	}
+	
+	private void ChangeFileIndex(int index){
+		
+		if(index<0){
+			index=0;
+		}
+		if(index>=SearchMainActivity.frequencyList.size()){
+			index=SearchMainActivity.frequencyList.size()-1;
+		}
+		if(index<0){
+			index=0;
+		}
+		musicArrIndex=index;
+		mFilename=SearchMainActivity.frequencyList.get(musicArrIndex);
+		loadFromFile();
+	}
+	
+	public void FileChange(int vis){
+//		mFilename = MainActivity.firstMisicPath;
+		//mFilename=SearchMainActivity.frequencyList.get(musicArrIndex);
+		if (mPlayer != null && mPlayer.isPlaying()) {
+			mPlayer.stop();
+        }
+		ChangeFileIndex(vis);
 	}
 	
 	private void loadGui() {
@@ -175,16 +201,30 @@ public class DrawWaveForm extends View
 //        mZoomOutButton.setOnClickListener(mZoomOutListener);
         mSaveButton = (ImageButton)view.findViewById(R.id.save);
 //        mSaveButton.setOnClickListener(mSaveListener);
-        mSaveButton.setOnClickListener(new OnClickListener() {
+        
+        mPlayButton.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-				mFilename = "/storage/emulated/0/bbbb.mp3";
-				if (mPlayer != null && mPlayer.isPlaying()) {
-					mPlayer.stop();
-		        }
-				loadFromFile();
+				onPlay(mStartPos);
+			}
+		});
+        
+        mRewindButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				FileChange(--musicArrIndex);
+			}
+		});        
+        mFfwdButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				FileChange(++musicArrIndex);
 			}
 		});
         TextView markStartButton = (TextView) view.findViewById(R.id.mark_start);
@@ -645,7 +685,7 @@ public class DrawWaveForm extends View
     }
     
     private void enableDisableButtons() {
-        if (mIsPlaying) {
+    	if (mIsPlaying) {
             mPlayButton.setImageResource(android.R.drawable.ic_media_pause);
             mPlayButton.setContentDescription(getResources().getText(R.string.stop));
         } else {

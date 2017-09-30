@@ -11,6 +11,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.AttributeSet;
@@ -42,6 +44,8 @@ public class MainChooseActivity extends ViewGroup {
     private int bmpW;// ¶¯»­Í¼Æ¬¿í¶È
 	private Context context;
 	private View view;
+	DrawWaveForm dwf;
+	public static Handler changeFile;
 	
 	 public MainChooseActivity(Context context, AttributeSet attrs,View view) {
 		 super(context, attrs);
@@ -53,6 +57,7 @@ public class MainChooseActivity extends ViewGroup {
 		InitTextView();
 		InitImageView();
 		InitViewPager();
+		changeFile=new ChooseHandle();
 	}
 
 	 private void InitLayout() {   
@@ -90,9 +95,9 @@ public class MainChooseActivity extends ViewGroup {
 		listViews.add(mInflater.inflate(R.layout.lay3, null));
 		mPager.setAdapter(new MyPagerAdapter(listViews));   
 		mPager.setCurrentItem(0);   
-		
+		String path = MainActivity.firstMisicPath;
 		SoundRecord tt =new SoundRecord(listViews.get(0).getContext(), null,listViews.get(0));
-		DrawWaveForm t2 =new DrawWaveForm(listViews.get(1).getContext(), null,listViews.get(1),"/storage/emulated/0/aaaa.mp3");
+		dwf =new DrawWaveForm(listViews.get(1).getContext(), null,listViews.get(1),path);
 		
 		//t2 =new DrawWaveForm(listViews.get(1).getContext(), null,listViews.get(1),"/storage/emulated/0/bbbb.mp3");
 		mPager.setOnPageChangeListener(new MyOnPageChangeListener()); 
@@ -188,6 +193,20 @@ public class MainChooseActivity extends ViewGroup {
 		@Override
 		protected void onLayout(boolean arg0, int arg1, int arg2, int arg3, int arg4) {
 			// TODO Auto-generated method stub
+			
+		}
+		class ChooseHandle extends Handler{
+
+			@Override
+			public void handleMessage(Message msg) {
+				// TODO Auto-generated method stub
+				super.handleMessage(msg);
+				Bundle b = msg.getData(); 
+				int vis = b.getInt("FileChange");
+				if(vis>=0){
+					dwf.FileChange(vis);
+				}
+			}
 			
 		}
 }
