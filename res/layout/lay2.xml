@@ -1,11 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical">
-	
+
+<LinearLayout 
+    android:id="@+id/noPathLayout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="horizontal"
+    android:gravity="center"
+    android:background="@color/snow">
+	<TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="未选取歌曲，点击"
+        android:gravity="center_vertical"
+        android:textColor="@color/black"
+        ></TextView>
+	<TextView
+        android:id="@+id/clientText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/ClientText"
+        android:gravity="center_vertical"
+        android:textColor="@color/darkred"
+        ></TextView>
+	<TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="选择。"
+        android:gravity="center_vertical"
+        android:textColor="@color/black"
+        ></TextView>
+  	</LinearLayout>
+<LinearLayout 
+    android:id="@+id/hasPathLayout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
     <TextView
         android:id="@+id/titleText"
         android:layout_width="fill_parent"
@@ -91,26 +124,8 @@
        android:contentDescription="@string/ffwd"
        android:src="@android:drawable/ic_media_next" />
 
-      <LinearLayout style="@style/VerticalDividerLeft" />
-      <LinearLayout style="@style/VerticalDividerRight" />
-
-      <ImageButton android:id="@+id/zoom_in"
-       android:layout_width="52dip"
-       android:layout_height="52dip"
-       android:layout_marginLeft="5dip"
-       android:layout_marginTop="9dip"
-       android:layout_marginBottom="8dip"
-       android:contentDescription="@string/zoom_in"
-       android:src="@drawable/button_zoom_in" />
-
-      <ImageButton android:id="@+id/zoom_out"
-       android:layout_width="52dip"
-       android:layout_height="52dip"
-       android:layout_marginTop="9dip"
-       android:layout_marginBottom="8dip"
-       android:contentDescription="@string/zoom_out"
-       android:src="@drawable/button_zoom_out" />
-
+     
+      
     </LinearLayout>
 
     <LinearLayout style="@style/HorizontalDividerTop" />
@@ -177,7 +192,15 @@
 
       <LinearLayout style="@style/VerticalDividerLeft" />
       <LinearLayout style="@style/VerticalDividerRight" />
-
+	
+      <LinearLayout
+          android:layout_width="fill_parent"
+          android:layout_weight="1"
+          android:layout_height="fill_parent"
+          ></LinearLayout>
+      
+      <LinearLayout style="@style/VerticalDividerLeft" />
+      <LinearLayout style="@style/VerticalDividerRight" />
       <LinearLayout
          android:layout_width="wrap_content"
          android:layout_height="fill_parent"
@@ -194,9 +217,8 @@
 
       </LinearLayout>
 
-      <LinearLayout style="@style/VerticalDividerLeft" />
-      <LinearLayout style="@style/VerticalDividerRight" />
-
+      
    </LinearLayout>
 
+</LinearLayout>
 </LinearLayout>

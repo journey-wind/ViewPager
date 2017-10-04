@@ -1,10 +1,12 @@
 package com.example.ViewClass;
 
+import com.example.Record.AudioUtil;
 import com.example.viewpagertest.R;
 import com.example.viewpagertest.SearchMainActivity;
 
 import android.content.Context;  
 import android.graphics.drawable.Drawable;
+import android.net.rtp.AudioCodec;
 import android.os.Bundle;
 import android.os.Message;
 import android.text.Editable;  
@@ -69,6 +71,7 @@ OnFocusChangeListener, TextWatcher {
                         && (event.getX() < ((getWidth() - getPaddingRight())));  
                 if (touchable) {   
                 	//ÏÔÊ¾ImageView--soundRecord
+                	AudioUtil.getInstance();
                     b.putInt("viewControl", 0);
                 }   else{
                 	//Òþ²ØImageView--soundRecord

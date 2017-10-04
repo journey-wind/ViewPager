@@ -5,8 +5,9 @@ import java.io.FileInputStream;
 
 import com.example.ViewClass.MarkerView;
 import com.example.ViewClass.WaveformView;
-import com.ringdroid.soundfile.CheapSoundFile;
 
+import com.ringdroid.soundfile.CheapSoundFile;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -14,6 +15,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Paint;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
@@ -25,11 +27,14 @@ import android.text.util.Linkify;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsoluteLayout;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class DrawWaveForm extends View 
@@ -123,6 +128,7 @@ public class DrawWaveForm extends View
 	    public static final int SERVER_ALLOWED_UNKNOWN = 0;
 	    public static final int SERVER_ALLOWED_NO = 1;
 	    public static final int SERVER_ALLOWED_YES = 2;
+	    private boolean isFirst=true;
 	
 	private Context context;
 	private View view;
@@ -135,14 +141,37 @@ public class DrawWaveForm extends View
 		mFilename = path;
 		mHandler = new Handler();
 
-        loadGui();
+        
 
+        if(MainActivity.firstMisicPath==null
+        		||MainActivity.firstMisicPath.equals("")){
+        	LoadNoFile();
+        	
+        }else{
+        	loadGui();
+        }
         mHandler.postDelayed(mTimerRunnable, 100);
 
-        if (!(mFilename==null || mFilename.equals(""))) {
-            loadFromFile();
-        }
+//        if (!(mFilename==null || mFilename.equals(""))) {
+//            loadFromFile();
+//        }
 		
+	}
+	private LinearLayout lly;
+	@SuppressLint("ResourceAsColor")
+	private void LoadNoFile(){
+		lly = (LinearLayout)view.findViewById(R.id.noPathLayout);
+		TextView tvClient = (TextView)view.findViewById(R.id.clientText);
+		tvClient.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				Intent intent = new Intent(); 
+			     intent.setClass(context, SearchMainActivity.class);
+			     context.startActivity(intent);
+			}
+		});
 	}
 	
 	private void ChangeFileIndex(int index){
@@ -167,6 +196,11 @@ public class DrawWaveForm extends View
 		if (mPlayer != null && mPlayer.isPlaying()) {
 			mPlayer.stop();
         }
+		if(isFirst){
+			lly.setVisibility(GONE);
+			loadGui();
+			isFirst=false;
+		}
 		ChangeFileIndex(vis);
 	}
 	
@@ -195,9 +229,9 @@ public class DrawWaveForm extends View
 //        mRewindButton.setOnClickListener(mRewindListener);
         mFfwdButton = (ImageButton)view.findViewById(R.id.ffwd);
 //        mFfwdButton.setOnClickListener(mFfwdListener);
-        mZoomInButton = (ImageButton)view.findViewById(R.id.zoom_in);
+//        mZoomInButton = (ImageButton)view.findViewById(R.id.zoom_in);
 //        mZoomInButton.setOnClickListener(mZoomInListener);
-        mZoomOutButton = (ImageButton)view.findViewById(R.id.zoom_out);
+//        mZoomOutButton = (ImageButton)view.findViewById(R.id.zoom_out);
 //        mZoomOutButton.setOnClickListener(mZoomOutListener);
         mSaveButton = (ImageButton)view.findViewById(R.id.save);
 //        mSaveButton.setOnClickListener(mSaveListener);
@@ -225,6 +259,14 @@ public class DrawWaveForm extends View
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
 				FileChange(++musicArrIndex);
+			}
+		});
+        mSaveButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				ShowSaveDialog();
 			}
 		});
         TextView markStartButton = (TextView) view.findViewById(R.id.mark_start);
@@ -267,7 +309,101 @@ public class DrawWaveForm extends View
         updateDisplay();
         mProgressDialog = new ProgressDialog(context);
     }
+	
+	private void ShowSaveDialog(){
+		new AlertDialog.Builder(context)
+		.setMessage("确定保存选定范围？")
+		.setPositiveButton("确定", saveDialogOk)
+		.setNegativeButton("取消", null)
+		.show();
+	}
 
+	private DialogInterface.OnClickListener saveDialogOk = new  DialogInterface.OnClickListener() {
+		
+		@Override
+		public void onClick(DialogInterface arg0, int arg1) {
+			// TODO Auto-generated method stub
+			ShowRenameDialog();
+		}
+	};
+	private EditText saveFileName;
+	private void ShowRenameDialog(){
+		saveFileName = new EditText(context); 
+		String titleLabel = mTitle;
+        if (mArtist != null && mArtist.length() > 0) {
+            titleLabel += " - " + mArtist;
+        }
+        saveFileName.setHint(titleLabel+"(切割)");
+		new AlertDialog.Builder(context)
+		.setMessage("修改文件名字")
+		.setView(saveFileName)
+		.setPositiveButton("确定", onSave)
+		.setNegativeButton("取消", null)
+		.show();
+	}
+	private DialogInterface.OnClickListener onSave = new DialogInterface.OnClickListener() {
+		
+		@Override
+		public void onClick(DialogInterface arg0, int arg1) {
+			// TODO Auto-generated method stub
+			saveRingtone();
+		}
+	};
+
+	private void saveRingtone() {
+        final String outPath = "/storage/emulated/0/sss.mp3";
+
+        String mDstFilename = outPath;
+
+        double startTime = mWaveformView.pixelsToSeconds(mStartPos);
+        double endTime = mWaveformView.pixelsToSeconds(mEndPos);
+        final int startFrame = mWaveformView.secondsToFrames(startTime);
+        final int endFrame = mWaveformView.secondsToFrames(endTime);
+        final int duration = (int)(endTime - startTime + 0.5);
+
+        // Create an indeterminate progress dialog
+        mProgressDialog = new ProgressDialog(context);
+        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        mProgressDialog.setTitle(R.string.progress_dialog_saving);
+        mProgressDialog.setIndeterminate(true);
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.show();
+
+        // Save the sound file in a background thread
+        new Thread() { 
+            public void run() { 
+                final File outFile = new File(outPath);
+                try {
+                    // Write the new file
+                    mSoundFile.WriteFile(outFile,
+                                         startFrame,
+                                         endFrame - startFrame);
+
+                    // Try to load the new file to make sure it worked
+                    final CheapSoundFile.ProgressListener listener =
+                        new CheapSoundFile.ProgressListener() {
+                            public boolean reportProgress(double frac) {
+                                // Do nothing - we're not going to try to
+                                // estimate when reloading a saved sound
+                                // since it's usually fast, but hard to
+                                // estimate anyway.
+                                return true;  // Keep going
+                            }
+                        };
+                    CheapSoundFile.create(outPath, listener);
+                } catch (Exception e) {
+                    mProgressDialog.dismiss();
+
+                }
+
+                mProgressDialog.dismiss();
+
+                
+            }
+        }.start();
+    }
+	
+	
 	private String getExtensionFromFilename(String filename) {
         return filename.substring(filename.lastIndexOf('.'),
                                   filename.length());

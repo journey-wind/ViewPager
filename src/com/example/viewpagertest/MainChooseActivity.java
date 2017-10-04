@@ -7,6 +7,7 @@ import android.R.color;
 import android.R.drawable;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Matrix;
@@ -96,7 +97,8 @@ public class MainChooseActivity extends ViewGroup {
 		mPager.setAdapter(new MyPagerAdapter(listViews));   
 		mPager.setCurrentItem(0);   
 		String path = MainActivity.firstMisicPath;
-		SoundRecord tt =new SoundRecord(listViews.get(0).getContext(), null,listViews.get(0));
+//		SoundRecord tt =new SoundRecord(listViews.get(0).getContext(), null,listViews.get(0));
+		RecordPlay tt =new RecordPlay(listViews.get(0));
 		dwf =new DrawWaveForm(listViews.get(1).getContext(), null,listViews.get(1),path);
 		
 		//t2 =new DrawWaveForm(listViews.get(1).getContext(), null,listViews.get(1),"/storage/emulated/0/bbbb.mp3");
@@ -128,14 +130,15 @@ public class MainChooseActivity extends ViewGroup {
 		  
 		public MyOnClickListener(int i) {   
 			index = i;   
+			
 		}   
 		  
 		@Override  
 		public void onClick(View v) {   
-		mPager.setCurrentItem(index);   
-		
+			
+			mPager.setCurrentItem(index);   
 		}   
-		};
+	};
 	
 		public class MyOnPageChangeListener implements OnPageChangeListener {
 

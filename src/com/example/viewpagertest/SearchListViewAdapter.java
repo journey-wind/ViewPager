@@ -25,7 +25,7 @@ public class SearchListViewAdapter extends BaseAdapter implements OnClickListene
 	
 	public interface Callback {
         public void click(View v);
-     }
+    }
 	
 	public SearchListViewAdapter(Context context,ArrayList<String> temp,Callback callback){
 		this.mInflater=LayoutInflater.from(context);

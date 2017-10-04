@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import com.example.Record.ClsOscilloscope;
+import com.example.Record.AudioUtil;
 import com.example.ViewClass.ClearEditText;
 import com.example.viewpagertest.MediaFile.MediaFileType;
 import com.example.viewpagertest.R.layout;
@@ -161,6 +161,7 @@ public class SearchMainActivity extends Activity implements Callback , OnItemCli
 						RecordTime.setVisibility(View.VISIBLE);
 						isPressImage=true;
 						isLoopText=true;
+						AudioUtil.mInstance.startRecord();
 						break;
 					case MotionEvent.ACTION_CANCEL:
 					case MotionEvent.ACTION_UP:
@@ -170,6 +171,8 @@ public class SearchMainActivity extends Activity implements Callback , OnItemCli
 						isPressImage =false;
 						RecordTime.setText("00：00");
 						showInputDialog();
+						AudioUtil.mInstance.stopRecord();
+						
 						break;
 						
 					default:
@@ -237,7 +240,7 @@ public class SearchMainActivity extends Activity implements Callback , OnItemCli
 	private void showInputDialog() {
 	    /*@setView 装入一个EditView
 	     */
-		fileName ="阿斯顿撒旦";
+		fileName ="testtt";
 	    final EditText editText = new EditText(SearchMainActivity.this);
 	    editText.setText(fileName);
 	    AlertDialog.Builder inputDialog = 
@@ -247,9 +250,14 @@ public class SearchMainActivity extends Activity implements Callback , OnItemCli
 	        new DialogInterface.OnClickListener() {
 	        @Override
 	        public void onClick(DialogInterface dialog, int which) {
+	        	AudioUtil.mInstance.SetFileName(fileName);
+	        	AudioUtil.mInstance.convertWaveFile();
 	            Toast.makeText(SearchMainActivity.this,
 	            editText.getText().toString(), 
 	            Toast.LENGTH_SHORT).show();
+	            frequencyList.add(AudioUtil.mInstance.GetFileName());
+	            SendToChoose(frequencyList.size()-1);
+	            SearchMainActivity.this.finish();
 	        }
 	    }).show();
 	}
@@ -278,6 +286,7 @@ public class SearchMainActivity extends Activity implements Callback , OnItemCli
 		// TODO Auto-generated method stub
 		if (ev.getAction() == MotionEvent.ACTION_DOWN) {  
 	        View v = soundAdd;  
+	        //判断是否碰触在view上
 	        if (isShouldHideInput(v, ev)) {  
 	  
 	            soundAdd.setVisibility(View.GONE);
@@ -449,16 +458,19 @@ public class SearchMainActivity extends Activity implements Callback , OnItemCli
 		historyAdapter.notifyDataSetChanged();
 		
 	}
+	private void SendToChoose(int index){
+		Message msg = new Message(); 
+        Bundle b = new Bundle();
+        b.putInt("FileChange", index);
+        msg.setData(b);
+        MainChooseActivity.changeFile.sendMessage(msg);
+	}
 
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 		// TODO Auto-generated method stub
 		MainActivity.firstMisicPath=frequencyList.get(arg2);
-		Message msg = new Message(); 
-        Bundle b = new Bundle();
-        b.putInt("FileChange", arg2);
-        msg.setData(b);
-        MainChooseActivity.changeFile.sendMessage(msg);
+		SendToChoose(arg2);
 		this.finish();
 		
 	}
