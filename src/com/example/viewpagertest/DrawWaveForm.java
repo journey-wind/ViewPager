@@ -128,7 +128,7 @@ public class DrawWaveForm extends View
 	    public static final int SERVER_ALLOWED_UNKNOWN = 0;
 	    public static final int SERVER_ALLOWED_NO = 1;
 	    public static final int SERVER_ALLOWED_YES = 2;
-	    private boolean isFirst=true;
+	    public static boolean isFirst=true;
 	
 	private Context context;
 	private View view;

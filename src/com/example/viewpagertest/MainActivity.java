@@ -5,7 +5,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -35,7 +34,6 @@ public class MainActivity extends ActionBarActivity {
         setSupportActionBar(toolbar);
         InitTextView();
 		InitViewPager();
-		
 	}
 
 	
@@ -95,6 +93,7 @@ public class MainActivity extends ActionBarActivity {
 		mPagerMain.setAdapter(new MyPagerAdapter(listViewsMain));   
 		mPagerMain.setCurrentItem(0);   
 		mca=new MainChooseActivity(listViewsMain.get(0).getContext(), null,listViewsMain.get(0));
+		SocialMessage sm =new SocialMessage(listViewsMain.get(1).getContext(),listViewsMain.get(1));
 		
 	}
 	@Override

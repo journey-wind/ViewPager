@@ -25,7 +25,7 @@ public class SearchListViewAdapter extends BaseAdapter implements OnClickListene
 	
 	public interface Callback {
         public void click(View v);
-    }
+     }
 	
 	public SearchListViewAdapter(Context context,ArrayList<String> temp,Callback callback){
 		this.mInflater=LayoutInflater.from(context);
@@ -62,10 +62,10 @@ public class SearchListViewAdapter extends BaseAdapter implements OnClickListene
 		String mFilename=data.get(arg0);
 		SongMetadataReader metadataReader = new SongMetadataReader((Activity) arg1.getContext(), mFilename);
         String mTitle = metadataReader.mTitle;
-        String mArtist = metadataReader.mArtist;
-        
+        String mArtist = metadataReader.mFilename;
+        mArtist=mArtist.substring(mArtist.lastIndexOf('.')+1);
 		tv1.setText(mTitle);
-		tv2.setText(mArtist);
+		tv2.setText(mArtist+"нд╪Ч");
 		Paint mp = new Paint();
 		Typeface font = Typeface.create(Typeface.SERIF, Typeface.NORMAL);
 		tv1.setTypeface(font);

@@ -23,19 +23,19 @@
         <RelativeLayout  
             android:layout_width="match_parent"  
             android:layout_height="wrap_content" >  
-  
-            <com.sdf.simplebeautyweibo.widget.RoundImageView  
+            <ImageView  
                 android:id="@+id/iv_head"  
                 android:layout_width="42dip"  
                 android:layout_height="42dip"  
-                android:layout_marginRight="8dip" />  
-  
+                android:layout_marginRight="8dip" 
+                android:src="@drawable/tempp"/>  
             <TextView  
                 android:id="@+id/tv_name"  
                 android:layout_width="wrap_content"  
                 android:layout_height="wrap_content"  
                 android:layout_toRightOf="@id/iv_head"  
-                android:text="名字" />  
+                android:text="名字" 
+                android:textColor="@color/black"/>  
   
             <TextView  
                 android:id="@+id/tv_time"   
@@ -44,7 +44,8 @@
                 android:layout_below="@id/tv_name"  
                 android:layout_marginTop="2dip"  
                 android:layout_toRightOf="@id/iv_head"  
-                android:text="来自简美微博 2015-01-26" />  
+                android:text="来自简美微博 2015-01-26" 
+                android:textColor="@color/black"/>  
   
          
             <TextView  
@@ -55,7 +56,8 @@
                 android:layout_marginBottom="4dip"  
                 android:layout_marginTop="10dip"  
                 android:lineSpacingExtra="2dip"  
-                android:text="哈哈，我今天发了条微博" />  
+                android:text="哈哈，我今天发了条微博" 
+                android:textColor="@color/black"/>  
   
             <!-- android:background="@drawable/timeline_profile_question_single_normal" -->  
   
@@ -76,25 +78,48 @@
                     android:layout_width="match_parent"  
                     android:layout_height="1.5dip"  
                     android:layout_marginBottom="8dip"  
-                    android:background="@color/snow" />  
-  
-                <TextView  
-                    android:id="@+id/tv_recontent"   
-                    android:layout_width="match_parent"  
-                    android:layout_height="wrap_content"  
-                    android:layout_below="@id/view_line"  
-                    android:lineSpacingExtra="2dip" />  
+                    android:background="@color/black" />  
+                
             </RelativeLayout>  
         </RelativeLayout>  
   
-        <!-- 展示图片 -->  
-        <com.sdf.simplebeautyweibo.widget.NineGridImageView  
-            android:id="@+id/grid_image"  
-            android:layout_width="match_parent"  
+        <!-- 展示音乐 -->  
+        <LinearLayout 
+            android:layout_width="fill_parent"  
             android:layout_height="wrap_content"  
-            android:visibility="gone"  
+            android:orientation="horizontal"
+            android:layout_gravity="center_vertical"
+            >
+
+            <ImageView
+                android:id="@+id/iv_play"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/abc_btn_radio_to_on_mtrl_015" />
+
+        <SeekBar    
+            android:id="@+id/sb_music"  
+            android:layout_width="fill_parent"  
+            android:layout_height="wrap_content"  
+            android:layout_weight="1"
+            android:visibility="visible"  
              />  
-  
+             <TextView 
+                 android:layout_width="wrap_content"  
+            	android:layout_height="wrap_content"  
+            	android:layout_marginTop="9dp"
+            	android:text="00:00"  
+                android:textColor="@color/black"  
+                android:textSize="12sp"/>
+             <TextView 
+                 android:layout_width="wrap_content"  
+            	android:layout_height="wrap_content"  
+            	android:layout_marginTop="9dp"
+            	android:text="/00:00"
+            	android:textStyle="bold"
+                android:textColor="@color/black"  
+                android:textSize="12sp"/>
+  			</LinearLayout>
         <RelativeLayout  
             android:layout_width="match_parent"  
             android:layout_height="35dip"  
@@ -111,20 +136,22 @@
                 android:gravity="center"  
                 android:orientation="horizontal"  
                 android:paddingBottom="2dip" >  
-  
-                <ImageView  
-                    android:id="@+id/iv_like"  
-                    android:layout_width="24dip"  
-                    android:layout_height="20dip"  
-                    android:src="@drawable/tempp" />  
-  
+                <TextView  
+                    android:id="@+id/tv_LisenNum"  
+                    android:layout_width="wrap_content"  
+                    android:layout_height="wrap_content"  
+                    android:paddingTop="4dip"  
+                    android:text="1"  
+                    android:textColor="@color/black"  
+                    android:textSize="12sp" />  
+                
                 <TextView  
                     android:id="@+id/tv_like"  
                     android:layout_width="wrap_content"  
                     android:layout_height="wrap_content"  
                     android:paddingTop="4dip"  
-                    android:text="1人赞了"  
-                    android:textColor="@color/blanchedalmond"  
+                    android:text="人听了"  
+                    android:textColor="@color/black"  
                     android:textSize="12sp" />  
             </LinearLayout>  
   
@@ -142,45 +169,14 @@
                     android:src="@drawable/tempp" />  
   
                 <TextView  
-                    android:id="@+id/tv_comment"  
+                    android:id="@+id/tv_likeNum"  
                     android:layout_width="wrap_content"  
                     android:layout_height="wrap_content"  
                     android:text="100"  
                     android:textColor="@color/blueviolet"  
                     android:textSize="12sp" />  
             </LinearLayout>  
-  
-            <LinearLayout  
-                android:id="@+id/lly_repost"  
-                android:layout_width="wrap_content"  
-                android:layout_height="wrap_content"  
-                android:layout_marginRight="10dip"  
-                android:layout_toLeftOf="@id/lly_comment"  
-                android:gravity="center"  
-                android:orientation="horizontal" >  
-  
-                <ImageView  
-                    android:layout_width="24dip"  
-                    android:layout_height="20dip"  
-                    android:src="@drawable/tempp" />  
-  
-                <TextView  
-                    android:id="@+id/tv_repost"  
-                    android:layout_width="wrap_content"  
-                    android:layout_height="wrap_content"  
-                    android:text="100"  
-                    android:textColor="@color/blanchedalmond"  
-                    android:textSize="12sp" />  
-            </LinearLayout>  
         </RelativeLayout>  
     </LinearLayout>  
-  
-    <ImageView  
-        android:id="@+id/iv_menu"  
-        android:layout_width="40dip"  
-        android:layout_height="40dip"  
-        android:layout_alignParentRight="true"  
-        android:paddingBottom="8dip"  
-        android:src="@drawable/tempp" />  
   
 </RelativeLayout> 

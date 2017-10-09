@@ -1,11 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"  
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"  
     xmlns:fab="http://schemas.android.com/apk/res-auto"  
     android:layout_width="match_parent"  
     android:layout_height="match_parent"  
     android:background="@color/snow"  
-    android:orientation="vertical" >  
+    android:orientation="vertical" >
+
+    <ListView
+        android:id="@+id/Messagelist"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+    </ListView>
+    
+	<LinearLayout 
+		android:layout_width="fill_parent"  
+	    android:layout_height="wrap_content"  
+	    android:layout_alignParentBottom="true"
+	    android:gravity="right"
+	    >
+    <ImageView
+        android:id="@+id/messageAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom" 
+        android:layout_marginRight="6dp"
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/menu_show_all_audio" />
+    </LinearLayout>
   
-   
-  
-</FrameLayout>  
+</RelativeLayout>  

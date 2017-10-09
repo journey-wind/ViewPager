@@ -1,5 +1,6 @@
 package com.example.ViewClass;
 
+import com.example.viewpagertest.DrawWaveForm;
 import com.example.viewpagertest.R;
 
 import android.content.Context;
@@ -28,9 +29,10 @@ public class ChoosePagerView extends ViewPager{
 //			getParent().requestDisallowInterceptTouchEvent(true);
 //			
 //		}
-		px2dip(this.getContext(),(float)1000);
-		if(ev.getY()>=60&&ev.getY()<=this.getWidth()-120
-					&& curPosition==1){
+		int dirButtom=dip2px(this.getContext(),(float)124);
+		int dirTop=dip2px(this.getContext(),(float)50);
+		if(ev.getY()>=dirTop&&ev.getY()<=this.getHeight()-dirButtom
+					&& curPosition==1 && !DrawWaveForm.isFirst){
 			getParent().requestDisallowInterceptTouchEvent(true);
 			noScroll=true;
 		}
@@ -54,6 +56,11 @@ public class ChoosePagerView extends ViewPager{
 		super(context, attrs);
 		// TODO Auto-generated constructor stub
 	}
+	
+	public static int dip2px(Context context, float dpValue) {
+		 final float scale = context.getResources().getDisplayMetrics().density;
+		 return (int) (dpValue * scale + 0.5f);
+		}
 	
 	public int px2dip(Context context, float pxValue) {  
         final float scale = context.getResources().getDisplayMetrics().density;  
