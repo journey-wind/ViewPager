@@ -5,6 +5,11 @@
 	    <item name="colorControlActivated">@color/floralwhite</item>
 	</style>
 	
+    <style name="CustomDialog" parent="Theme.AppCompat.Dialog">
+  <item name="android:backgroundDimEnabled">true</item>
+  <item name="android:windowBackground">@android:color/transparent</item>
+</style>
+    
     <style name="AudioFileInfoOverlayText">
 	    <item name="android:paddingLeft">4px</item>
 	    <item name="android:paddingBottom">4px</item>

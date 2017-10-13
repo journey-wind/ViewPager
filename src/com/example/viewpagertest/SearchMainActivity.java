@@ -21,6 +21,7 @@ import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -76,7 +77,7 @@ public class SearchMainActivity extends Activity implements Callback , OnItemCli
 //	private LinearLayout resultLayout;
 	private ImageView imageExit;
 	private ImageView soundAdd;
-	
+	private String fromStr;
 	private int sumSecond;
 	
 	
@@ -86,6 +87,13 @@ public class SearchMainActivity extends Activity implements Callback , OnItemCli
 		setContentView(R.layout.search_main);
 		isPressImage=false;
 		isLoopText=false;
+		
+		Intent intent=getIntent();
+        Bundle bundle=intent.getExtras();
+        if(bundle!=null){
+        	fromStr=bundle.getString("from");
+        }
+		
 		hand=new MyHandler();
 		
 		RecordTime = (TextView)findViewById(R.id.SearchTime);
@@ -463,7 +471,11 @@ public class SearchMainActivity extends Activity implements Callback , OnItemCli
         Bundle b = new Bundle();
         b.putInt("FileChange", index);
         msg.setData(b);
-        MainChooseActivity.changeFile.sendMessage(msg);
+        if(fromStr.equals("Main")){
+        	MainChooseActivity.changeFile.sendMessage(msg);
+        }else if(fromStr.equals("AddMsg")){
+        	AddMsgActivity.selectHand.sendMessage(msg);
+        }
 	}
 
 	@Override

@@ -5,27 +5,41 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.TimerTask;
+
+import com.example.Record.BackService;
+import com.example.Record.MsgTypeUtil;
+import com.example.ViewClass.Loading_view;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends ActionBarActivity {
 
-	 private ViewPager mPagerMain;//页卡内容
+	private ViewPager mPagerMain;//页卡内容
      private List<View> listViewsMain; // Tab页面列表
      private TextView t1Main,t2Main;// 页卡头标
      private MainChooseActivity mca;
      public static String firstMisicPath;
-	
+     public static BackService msgServer;
+     public static Handler mainHand;
+     private ImageView imgUser;
+     
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -34,9 +48,43 @@ public class MainActivity extends ActionBarActivity {
         setSupportActionBar(toolbar);
         InitTextView();
 		InitViewPager();
+		msgServer=new BackService();
+		mainHand=new MainHandler();
+		imgUser=(ImageView)findViewById(R.id.imgUser);
+		
+		imgUser.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 	}
 
-	
+	class MainHandler extends Handler{
+
+		@Override
+		public void handleMessage(Message msg) {
+			// TODO Auto-generated method stub
+			if (msg.what == 1) {
+				Toast.makeText(getApplicationContext(), "发送失败", Toast.LENGTH_SHORT).show();;
+			}else if(msg.what == 2){
+				Toast.makeText(getApplicationContext(), "发送成功", Toast.LENGTH_SHORT).show();
+			}else if(msg.what == 3){
+				Toast.makeText(getApplicationContext(), "无法连接服务器", Toast.LENGTH_SHORT).show();
+			}else if(msg.what == 4){
+				String aa= (String)msg.obj;
+				Toast.makeText(getApplicationContext(), aa, Toast.LENGTH_SHORT).show();
+			}else if(msg.what == 5){
+				Toast.makeText(getApplicationContext(), "连接成功", Toast.LENGTH_SHORT).show();
+			}else if(msg.what == 6){
+
+			}
+			super.handleMessage(msg);
+		}
+		
+	};
 	
 	public static Activity getGlobleActivity() throws ClassNotFoundException, IllegalArgumentException, SecurityException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, NoSuchFieldException{
         Class activityThreadClass = Class.forName("android.app.ActivityThread");
@@ -112,7 +160,9 @@ public class MainActivity extends ActionBarActivity {
 		if (id == R.id.action_settings) {
 			Intent intent = new Intent(); 
 		     intent.setClass(MainActivity.this, SearchMainActivity.class);
-		     MainActivity.this.startActivity(intent);
+		     //MainActivity.this.startActivity(intent);
+		     intent.putExtra("from", "Main");
+	            startActivity(intent);  
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
