@@ -1,9 +1,16 @@
 package com.example.ViewClass;
 
-import com.example.viewpagertest.DrawWaveForm;
-import com.example.viewpagertest.R;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
+import com.example.viewpagertest.DrawWaveForm;
+import com.example.viewpagertest.MainActivity;
+import com.example.viewpagertest.R;
+import com.example.viewpagertest.SocialMessage;
+
+import android.app.Activity;
 import android.content.Context;
+import android.os.Message;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -11,7 +18,6 @@ import android.view.MotionEvent;
 public class ChoosePagerView extends ViewPager{
 
 	private boolean noScroll;
-	
 	@Override
 	public boolean onTouchEvent(MotionEvent arg0) {
 		// TODO Auto-generated method stub
@@ -40,6 +46,7 @@ public class ChoosePagerView extends ViewPager{
 			getParent().requestDisallowInterceptTouchEvent(false);
 			noScroll=false;
 		}
+		
 		return super.dispatchTouchEvent(ev);
 	}
 

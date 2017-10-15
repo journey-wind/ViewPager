@@ -45,13 +45,18 @@
 	    android:layout_width="fill_parent"
 	    android:layout_height="fill_parent" 
 	    >
+        <android.support.v4.widget.SwipeRefreshLayout
+          android:id="@+id/srlSearch"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent">
+
 	    <ListView
 	        android:id="@+id/listSearch"
 	        android:layout_width="fill_parent"
 	    	android:layout_height="wrap_content"
 	    	>
 	    </ListView>
-	    
+	    </android.support.v4.widget.SwipeRefreshLayout>
 
 		    <TextView
 			    android:id="@+id/SearchTime"

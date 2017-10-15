@@ -28,7 +28,7 @@ public class BackService  {
 	private static final String TAG = "BackService";
 	private static final long HEART_BEAT_RATE = 30 * 1000;
 
-	public static final String HOST = "192.168.1.103";// "192.168.1.21";//
+	public static final String HOST = "192.168.1.116";// "192.168.1.21";//
 	public static final int PORT = 2233;
 	
 	public static final String MESSAGE_ACTION="org.feng.message_ACTION";
@@ -119,7 +119,7 @@ public class BackService  {
 		try {
 			if (!soc.isClosed() && !soc.isOutputShutdown()) {
 				OutputStream os = soc.getOutputStream();
-				String message = msg + "\r\n";
+				String message = msg ;
 				os.write(message.getBytes("UTF-8"));
 				os.flush();
 				sendTime = System.currentTimeMillis();//每次发送成数据，就改一下最后成功发送的时间，节省心跳间隔时间
@@ -201,6 +201,7 @@ public class BackService  {
 		public void run() {
 			super.run();
 			Socket socket = mWeakSocket.get();
+			String tempStr = ""; 
 			if (null != socket) {
 				try {
 					InputStream is = socket.getInputStream();
@@ -237,18 +238,22 @@ public class BackService  {
 							        b.putInt("FileChange", -101);
 							        msg.setData(b);
 							        AddMsgActivity.selectHand.sendMessage(msg);
-								}else if(message.equals("end")){
+								}else if(message.indexOf("end")>=0){
+									tempStr+=message;
+									String[] temp =tempStr.split("<<3>>");
 									Message msg = SocialMessage.socialHandl.obtainMessage();
-									msg.obj = null;
+									msg.obj = temp;
 									msg.what = 2;
 									SocialMessage.socialHandl.sendMessage(msg);// 结果返回
+									tempStr="";
 									//close();
 								}else if(message.indexOf("<<3>>") > 0){
-									String[] str=message.split("/");
-									Message msg = SocialMessage.socialHandl.obtainMessage();
-									msg.obj = str;
-									msg.what = 1;
-									SocialMessage.socialHandl.sendMessage(msg);// 结果返回
+//									message.split("<<3>>");
+//									Message msg = SocialMessage.socialHandl.obtainMessage();
+//									msg.obj = message;
+//									msg.what = 1;
+//									SocialMessage.socialHandl.sendMessage(msg);// 结果返回
+									tempStr+=message;
 								}else if(message.equals("")){
 									
 								}

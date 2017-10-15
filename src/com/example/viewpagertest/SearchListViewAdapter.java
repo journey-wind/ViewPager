@@ -9,6 +9,7 @@ import android.content.Context;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.provider.ContactsContract.Contacts.Data;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -21,6 +22,7 @@ public class SearchListViewAdapter extends BaseAdapter implements OnClickListene
 
 	private LayoutInflater mInflater=null;
 	private ArrayList<String> data; 
+	private ArrayList<String> queryData ; 
 	private Callback mCallback;
 	
 	public interface Callback {
@@ -31,11 +33,37 @@ public class SearchListViewAdapter extends BaseAdapter implements OnClickListene
 		this.mInflater=LayoutInflater.from(context);
 		data =temp;
 		mCallback = callback;
+		queryData =new ArrayList<String>();
+		queryData.addAll(data);
+	}
+	
+	 public void queryData(String query){  
+	    queryData.clear();
+	    if(query.equals("")){
+	    	queryData.addAll(data);
+	    }else{
+	        for(String key : data){  
+	        	String temp =key.substring(key.lastIndexOf("/"));
+	            if(!TextUtils.isEmpty(key) && temp.contains(query)){  
+	                queryData.add(key);  
+	            }  
+	        }  
+	    }
+	    notifyDataSetChanged();  
+	}  
+	
+	 
+	public void setDataList(ArrayList<String> outData){
+		data=null;
+		data=outData;
+		queryData.clear();
+		queryData.addAll(data);
+		notifyDataSetChanged();  
 	}
 	@Override
 	public int getCount() {
 		// TODO Auto-generated method stub
-		return data.size();
+		return queryData.size();
 	}
 
 	@Override
@@ -59,7 +87,7 @@ public class SearchListViewAdapter extends BaseAdapter implements OnClickListene
 		ImageView imgv =(ImageView)arg1.findViewById(R.id.imageView2);
 		imgv.setOnClickListener(this);
 		
-		String mFilename=data.get(arg0);
+		String mFilename=queryData.get(arg0);
 		SongMetadataReader metadataReader = new SongMetadataReader((Activity) arg1.getContext(), mFilename);
         String mTitle = metadataReader.mTitle;
         String mArtist = metadataReader.mFilename;

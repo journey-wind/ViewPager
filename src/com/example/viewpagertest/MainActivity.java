@@ -2,7 +2,10 @@ package com.example.viewpagertest;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.TimerTask;
@@ -13,10 +16,12 @@ import com.example.ViewClass.Loading_view;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
@@ -31,6 +36,7 @@ import android.widget.Toast;
 
 public class MainActivity extends ActionBarActivity {
 
+	public static SharedPreferences sharedPreferences;
 	private ViewPager mPagerMain;//页卡内容
      private List<View> listViewsMain; // Tab页面列表
      private TextView t1Main,t2Main;// 页卡头标
@@ -39,6 +45,7 @@ public class MainActivity extends ActionBarActivity {
      public static BackService msgServer;
      public static Handler mainHand;
      private ImageView imgUser;
+     public static boolean isFirst=true;
      
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +55,7 @@ public class MainActivity extends ActionBarActivity {
         setSupportActionBar(toolbar);
         InitTextView();
 		InitViewPager();
+		sharedPreferences = getSharedPreferences("myshare",Activity.MODE_PRIVATE);
 		msgServer=new BackService();
 		mainHand=new MainHandler();
 		imgUser=(ImageView)findViewById(R.id.imgUser);
@@ -72,6 +80,9 @@ public class MainActivity extends ActionBarActivity {
 			}else if(msg.what == 2){
 				Toast.makeText(getApplicationContext(), "发送成功", Toast.LENGTH_SHORT).show();
 			}else if(msg.what == 3){
+				if(SocialMessage.swipeRefreshView!=null){
+					SocialMessage.swipeRefreshView.setRefreshing(false);
+				}
 				Toast.makeText(getApplicationContext(), "无法连接服务器", Toast.LENGTH_SHORT).show();
 			}else if(msg.what == 4){
 				String aa= (String)msg.obj;
@@ -79,7 +90,8 @@ public class MainActivity extends ActionBarActivity {
 			}else if(msg.what == 5){
 				Toast.makeText(getApplicationContext(), "连接成功", Toast.LENGTH_SHORT).show();
 			}else if(msg.what == 6){
-
+				int i = (Integer)msg.obj;
+//				Toast.makeText(getApplicationContext(), "共更新了"+i+"条信息", Toast.LENGTH_SHORT).show();
 			}
 			super.handleMessage(msg);
 		}
@@ -125,6 +137,31 @@ public class MainActivity extends ActionBarActivity {
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
 				mPagerMain.setCurrentItem(1);  
+//				if(isFirst){
+//					String temp1 = MainActivity.sharedPreferences.getString("LastMessageOne", "");
+//	    			String temp2 = MainActivity.sharedPreferences.getString("LastMessageTwo", "");
+//	    			String temp3 = MainActivity.sharedPreferences.getString("LastMessageThree", "");
+//	    			String temp4 = MainActivity.sharedPreferences.getString("LastMessageFour", "");
+//	    			String temp5 = MainActivity.sharedPreferences.getString("LastMessageFive", "");
+//	    			String temp6 = MainActivity.sharedPreferences.getString("LastMessageSix", "");
+//	    			String temp7 = MainActivity.sharedPreferences.getString("LastMessageSeven", "");
+//	    			String sumTemp=temp1+temp2+temp3+temp4+temp5+temp6+temp7+"end";
+//	    			if(sumTemp!=""){
+//	    				String[] temp=sumTemp.split("<<3>>");
+//	    				Message msg1 = SocialMessage.socialHandl.obtainMessage();
+//	    				msg1.obj = temp;
+//	    				msg1.what = 2;
+//	    				SocialMessage.socialHandl.sendMessage(msg1);// 结果返回
+//	    			}
+//	    			if(sumTemp.equals("end")){
+//	    					SimpleDateFormat df = new SimpleDateFormat("yyMMddHHmmss");
+//	    					String date= df.format(new Date());  
+//	    					String stt ="GetNewMessage:"+date;
+//	    					MainActivity.msgServer.sendMsg(stt);
+//	    			}
+//	    			isFirst=false;
+//            	}
+				
 			}
 		});   
 		
@@ -142,7 +179,53 @@ public class MainActivity extends ActionBarActivity {
 		mPagerMain.setCurrentItem(0);   
 		mca=new MainChooseActivity(listViewsMain.get(0).getContext(), null,listViewsMain.get(0));
 		SocialMessage sm =new SocialMessage(listViewsMain.get(1).getContext(),listViewsMain.get(1));
-		
+		mPagerMain.setOnPageChangeListener(new OnPageChangeListener() {
+			
+			@Override
+			public void onPageSelected(int arg0) {
+				// TODO Auto-generated method stub
+				if(isFirst && arg0==1){
+            		Message msg = SocialMessage.socialHandl.obtainMessage();
+    				msg.obj = null;
+    				msg.what = 1;
+    				SocialMessage.socialHandl.sendMessage(msg);// 结果返回
+	            	String temp1 = MainActivity.sharedPreferences.getString("LastMessageOne", "");
+	    			String temp2 = MainActivity.sharedPreferences.getString("LastMessageTwo", "");
+	    			String temp3 = MainActivity.sharedPreferences.getString("LastMessageThree", "");
+	    			String temp4 = MainActivity.sharedPreferences.getString("LastMessageFour", "");
+	    			String temp5 = MainActivity.sharedPreferences.getString("LastMessageFive", "");
+	    			String temp6 = MainActivity.sharedPreferences.getString("LastMessageSix", "");
+	    			String temp7 = MainActivity.sharedPreferences.getString("LastMessageSeven", "");
+	    			String sumTemp=temp1+temp2+temp3+temp4+temp5+temp6+temp7+"end";
+	    			if(sumTemp!=""){
+	    				String[] temp=sumTemp.split("<<3>>");
+	    				Message msg1 = SocialMessage.socialHandl.obtainMessage();
+	    				msg1.obj = temp;
+	    				msg1.what = 2;
+	    				SocialMessage.socialHandl.sendMessage(msg1);// 结果返回
+	    			}
+	    			if(sumTemp.equals("end")){
+	    					SimpleDateFormat df = new SimpleDateFormat("yyMMddHHmmss");
+	    					String date= df.format(new Date());  
+	    					String stt ="GetNewMessage:"+date;
+	    					MainActivity.msgServer.sendMsg(stt);
+	    			}
+	    			isFirst=false;
+            	}
+			}
+			
+			@Override
+			public void onPageScrolled(int arg0, float arg1, int arg2) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void onPageScrollStateChanged(int arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 	}
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

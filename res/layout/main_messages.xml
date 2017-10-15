@@ -5,12 +5,16 @@
     android:layout_height="match_parent"  
     android:background="@color/snow"  
     android:orientation="vertical" >
-
-    <com.example.ViewClass.MyListView
+    
+	<com.example.ViewClass.MySwipeRefresh
+          android:id="@+id/srl"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent">
+    <ListView
         android:id="@+id/Messagelist"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-
+	</com.example.ViewClass.MySwipeRefresh>
     
 	<LinearLayout 
 		android:layout_width="fill_parent"  

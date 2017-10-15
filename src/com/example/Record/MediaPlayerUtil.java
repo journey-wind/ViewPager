@@ -3,11 +3,14 @@ package com.example.Record;
 import java.io.IOException;
 import java.util.TimerTask;
 
+import com.example.viewpagertest.MainActivity;
+
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnBufferingUpdateListener;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnPreparedListener;
+import android.os.Message;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 
@@ -49,20 +52,30 @@ OnCompletionListener, OnPreparedListener{
 	}
 	
 	public void Prepared(String url){
+		boolean isError=false;
 		 try {  
-	            mediaPlayer.reset();  
+	            mediaPlayer.reset();   
 	            mediaPlayer.setDataSource(url);  
 	            mediaPlayer.prepare();//prepare之后自动播放  
 	        } catch (IllegalArgumentException e) {  
 	            // TODO Auto-generated catch block  
 	            e.printStackTrace();  
+	            isError=true;
 	        } catch (IllegalStateException e) {  
 	            // TODO Auto-generated catch block  
 	            e.printStackTrace();  
+	            isError=true;
 	        } catch (IOException e) {  
 	            // TODO Auto-generated catch block  
 	            e.printStackTrace();  
+	            isError=true;
 	        }  
+		 if(isError){
+			 Message msgg = MainActivity.mainHand.obtainMessage();
+			msgg.obj=null;
+			msgg.what = 4;
+			MainActivity.mainHand.sendMessage(msgg);// 结果返回
+		 }
 	}
 	
 	class MySeekbar implements OnSeekBarChangeListener {  

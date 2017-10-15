@@ -2,6 +2,7 @@ package com.example.viewpagertest;
 
 import android.R.integer;
 import android.content.Context;
+import android.content.SharedPreferences.Editor;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -22,6 +23,8 @@ import com.example.Record.*;
 import com.example.viewpagertest.SearchListViewAdapter.Callback;
 
 public class MsgListViewAdapter extends BaseAdapter implements OnClickListener{
+
+
 
 	static class ViewHolder
 	{
@@ -66,6 +69,38 @@ public class MsgListViewAdapter extends BaseAdapter implements OnClickListener{
 		// TODO Auto-generated method stub
 		return 0;
 	}
+	public void RefreshAndSave(){
+		Editor editor = MainActivity.sharedPreferences.edit();//»ñÈ¡±à¼­Æ÷
+		for(int i=0;i<data.size()&&i<5;i++){
+			switch(i){
+			case 0:
+				editor.putString("LastMessageOne", data.get(i).toString());
+				break;
+			case 1:
+				editor.putString("LastMessageTwo", data.get(i).toString());
+				break;
+			case 2:
+				editor.putString("LastMessageThree", data.get(i).toString());
+				break;
+			case 3:
+				editor.putString("LastMessageFour", data.get(i).toString());
+				break;
+			case 4:
+				editor.putString("LastMessageFive", data.get(i).toString());
+				break;
+			case 5:
+				editor.putString("LastMessageSix", data.get(i).toString());
+				break;
+			case 6:
+				editor.putString("LastMessageSeven", data.get(i).toString());
+				break;
+			default:
+				break;
+			}
+		}
+		editor.commit();
+		notifyDataSetChanged();
+	}
 
 	@Override
 	public View getView(int arg0, View arg1, ViewGroup arg2) {
@@ -104,6 +139,7 @@ public class MsgListViewAdapter extends BaseAdapter implements OnClickListener{
 	    //holder.iv_head.setVisibility(View.GONE);
 	    //holder.sb_music.setVisibility(View.GONE);
 	    String timeStr=compareToNowDate(data.get(arg0).time);
+	   
 	    holder.tv_name.setText(data.get(arg0).name);
 	    holder.tv_time.setText(timeStr);
 	    holder.tv_content.setText(data.get(arg0).context);
@@ -114,7 +150,9 @@ public class MsgListViewAdapter extends BaseAdapter implements OnClickListener{
 	}
 	
 	
+	@SuppressWarnings("deprecation")
 	private String compareToNowDate(String date){  
+		
         Date nowDate,passDate;
         long diff=-100l;
         String time_str="";
@@ -125,7 +163,8 @@ public class MsgListViewAdapter extends BaseAdapter implements OnClickListener{
         try {
 			passDate = formatter.parse(date);
 			nowDate = formatter.parse(nowStr);
-			day=nowDate.getDay()-passDate.getDay();
+			
+			day=nowDate.getDate()-passDate.getDate();
 			month=nowDate.getMonth()-passDate.getMonth();
 			year=nowDate.getYear()-passDate.getYear();
 			if(year!=0){

@@ -34,7 +34,9 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.Editable;
+import android.text.TextWatcher;
 import android.text.format.Time;
 import android.text.method.KeyListener;
 import android.view.KeyEvent;
@@ -79,7 +81,7 @@ public class SearchMainActivity extends Activity implements Callback , OnItemCli
 	private ImageView soundAdd;
 	private String fromStr;
 	private int sumSecond;
-	
+	private SwipeRefreshLayout sfl;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -102,16 +104,50 @@ public class SearchMainActivity extends Activity implements Callback , OnItemCli
 		historyLayout=(RelativeLayout)findViewById(R.id.historyLayout);
 //		resultLayout=(LinearLayout)findViewById(R.id.resultLayout);
 		editSearch=(ClearEditText)findViewById(R.id.Editsearch);
+		sfl=(SwipeRefreshLayout)findViewById(R.id.srlSearch);
+		sfl.measure(0,0);
+   	 	sfl.setRefreshing(true);
 //		editSearch.setOnEditorActionListener(new returnKeyDeal());
-		frequencyList = SeekFrequency();
-		listView = (ListView)findViewById(R.id.listSearch);
-
-		soundAdd.setOnTouchListener(new AddSoundClick());
+		 new Handler().postDelayed(new Runnable() {  
+             @Override  
+             public void run() {  
+            	 frequencyList = SeekFrequency();
+            	 historyAdapter =new SearchListViewAdapter(SearchMainActivity.this, frequencyList , SearchMainActivity.this); 
+                 listView.setAdapter(historyAdapter);
+                 listView.setOnItemClickListener(SearchMainActivity.this);
+                 sfl.setRefreshing(false);
+             }  
+         }, 2500);  
 		
-        historyAdapter =new SearchListViewAdapter(this, frequencyList , this); 
-        listView.setAdapter(historyAdapter);
-        listView.setOnItemClickListener(this);
-        
+		listView = (ListView)findViewById(R.id.listSearch);
+		soundAdd.setOnTouchListener(new AddSoundClick());
+        editSearch.addTextChangedListener(new TextWatcher() {
+			
+			@Override
+			public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
+				// TODO Auto-generated method stub
+				if(historyAdapter!=null){
+					if(arg0.length()>0){
+						historyAdapter.queryData(arg0.toString().trim());
+					}else{
+						historyAdapter.queryData("");
+					}
+				}
+				
+			}
+			
+			@Override
+			public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void afterTextChanged(Editable arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
         imageExit.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -120,7 +156,25 @@ public class SearchMainActivity extends Activity implements Callback , OnItemCli
 				finish();
 			}
 		});
- 
+        sfl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                    	editSearch.setText("");
+                    	frequencyList=null;
+                    	frequencyList = SeekFrequency();
+                    	historyAdapter.setDataList(frequencyList);
+                        // 加载完数据设置为不刷新状态，将下拉进度收起来
+                        sfl.setRefreshing(false);
+                    }
+                }, 1200);
+
+            }
+        });
+
 	}
 	
 	class MyHandler extends Handler {
