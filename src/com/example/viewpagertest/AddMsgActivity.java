@@ -1,5 +1,6 @@
 package com.example.viewpagertest;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -12,6 +13,7 @@ import com.example.ViewClass.Loading_view;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -76,11 +78,27 @@ public class AddMsgActivity extends Activity {
 		        String date= df.format(new Date());  
 				String str = date +"/user/"+messageEdit.getText().toString()+"/";
 				String path="";
+				String musicLength="";
 				if(!(selectMusic==null || selectMusic.equals(""))){
 					 String type=selectMusic.substring(selectMusic.lastIndexOf("."));
 					 path = date+type;
 				}
-				str=str+path+"/<<1>>";
+				if(path.equals("")){
+					path=" ";	
+					musicLength=" ";
+				}else{
+					MediaPlayer mediaPlayer = new MediaPlayer();
+					try {
+						mediaPlayer.setDataSource(selectMusic);
+						mediaPlayer.prepare();
+						musicLength=String.valueOf(mediaPlayer.getDuration());
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						musicLength="-1";
+					}
+				}
+				str=str+path+"/"+musicLength+"/<<1>>";
 				//stu.SendMessage(str, path);
 				//SocialMessage.socketTh.Send(str,ReceiveType.PushMessage);
 				

@@ -5,12 +5,12 @@ import java.io.FileInputStream;
 
 import com.example.ViewClass.MarkerView;
 import com.example.ViewClass.WaveformView;
-
 import com.ringdroid.soundfile.CheapSoundFile;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,9 +18,12 @@ import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.RingtoneManager;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.net.Uri;
 import android.os.Handler;
+import android.os.Message;
+import android.provider.MediaStore;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
@@ -36,6 +39,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class DrawWaveForm extends View 
 	implements MarkerView.MarkerListener,
@@ -54,8 +58,8 @@ public class DrawWaveForm extends View
 	    private WaveformView mWaveformView;
 	    private MarkerView mStartMarker;
 	    private MarkerView mEndMarker;
-	    private TextView mStartText;
-	    private TextView mEndText;
+	    private EditText mStartText;
+	    private EditText mEndText;
 	    private TextView mTitleText;
 	    private TextView mInfo;
 	    private ImageButton mPlayButton;
@@ -167,9 +171,10 @@ public class DrawWaveForm extends View
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-				Intent intent = new Intent(); 
-			     intent.setClass(context, SearchMainActivity.class);
-			     context.startActivity(intent);
+				Message msg = MainActivity.mainHand.obtainMessage();
+				msg.obj = null;
+				msg.what = 7;
+				MainActivity.mainHand.sendMessage(msg);// 结果返回
 			}
 		});
 	}
@@ -216,9 +221,9 @@ public class DrawWaveForm extends View
         mMarkerTopOffset = (int)(10 * mDensity);
         mMarkerBottomOffset = (int)(10 * mDensity);
 
-        mStartText = (TextView)view.findViewById(R.id.starttext);
+        mStartText = (EditText)view.findViewById(R.id.et_start);
 //        mStartText.addTextChangedListener(mTextWatcher);
-        mEndText = (TextView)view.findViewById(R.id.endtext);
+        mEndText = (EditText)view.findViewById(R.id.et_end);
 //        mEndText.addTextChangedListener(mTextWatcher);
         
         mTitleText = (TextView)view.findViewById(R.id.titleText);
@@ -351,9 +356,10 @@ public class DrawWaveForm extends View
 	};
 
 	private void saveRingtone() {
-        final String outPath = "/storage/emulated/0/sss.mp3";
+		final String title = saveFileName.getText().toString() ;
+        final String outPath = "/storage/emulated/0/"+title+ mFilename.substring(mFilename.lastIndexOf("."));
 
-        String mDstFilename = outPath;
+        //String mDstFilename = outPath;
 
         double startTime = mWaveformView.pixelsToSeconds(mStartPos);
         double endTime = mWaveformView.pixelsToSeconds(mEndPos);
@@ -393,15 +399,59 @@ public class DrawWaveForm extends View
                     CheapSoundFile.create(outPath, listener);
                 } catch (Exception e) {
                     mProgressDialog.dismiss();
-
+                    Message msg = MainActivity.mainHand.obtainMessage();
+    				msg.obj = null;
+    				msg.what = 8;
+    				MainActivity.mainHand.sendMessage(msg);// 结果返回
                 }
+                Runnable runnable = new Runnable() {
+                    public void run() {
+                        afterSavingRingtone(title,
+                                            outPath,
+                                            outFile,
+                                            duration);
+                        mProgressDialog.dismiss();
+                    }
+                };
+                mHandler.post(runnable);
 
-                mProgressDialog.dismiss();
+                
 
                 
             }
         }.start();
     }
+	
+	private void afterSavingRingtone(CharSequence title,
+            String outPath,File outFile,int duration) {
+		long length = outFile.length();
+		if (length <= 512) {
+			outFile.delete();
+			return;
+		}
+		
+		// Create the database record, pointing to the existing file path
+		
+		long fileSize = outFile.length();
+		String mimeType = "audio/mpeg";
+		
+		String artist = "" + getResources().getText(R.string.artist_name);
+		
+		ContentValues values = new ContentValues();
+		values.put(MediaStore.MediaColumns.DATA, outPath);
+		values.put(MediaStore.MediaColumns.TITLE, title.toString());
+		values.put(MediaStore.MediaColumns.SIZE, fileSize);
+		values.put(MediaStore.MediaColumns.MIME_TYPE, mimeType);
+		
+		values.put(MediaStore.Audio.Media.ARTIST, artist);
+		values.put(MediaStore.Audio.Media.DURATION, duration);
+		
+		// Insert it into the database
+		Uri uri = MediaStore.Audio.Media.getContentUriForPath(outPath);
+		final Uri newUri = context.getContentResolver().insert(uri, values);
+		int u=0;
+	}
+	
 	
 	
 	private String getExtensionFromFilename(String filename) {
@@ -484,7 +534,6 @@ public class DrawWaveForm extends View
                 try {
                     mSoundFile = CheapSoundFile.create(mFile.getAbsolutePath(),
                                                        listener);
-
                     if (mSoundFile == null) {
                         mProgressDialog.dismiss();
                         String name = mFile.getName().toLowerCase();

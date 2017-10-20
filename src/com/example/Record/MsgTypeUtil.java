@@ -4,8 +4,8 @@ public class MsgTypeUtil {
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		String path =  musicPath.substring(musicPath.lastIndexOf("/")+1);
-		String temp = time+"/"+name+"/"+context+" /"+path+" /<<3>>";
+		String musicName =  musicPath.substring(musicPath.lastIndexOf("/")+1);
+		String temp = time+"/"+name+"/"+context+" /"+musicName+" /"+musicLegth+" /<<3>>";
 		return temp;
 	}
 
@@ -16,9 +16,10 @@ public class MsgTypeUtil {
 	public String likeNum="";
 	public String imgPath="";
 	public String musicPath="";
+	public String musicLegth="";
 	
 	public MsgTypeUtil(String name, String time, String context, String lisenNum, String likeNum, String imgPath,
-			String musicPath) {
+			String musicPath,String musicLegth) {
 		super();
 		this.name = name;
 		this.time = time;
@@ -27,5 +28,6 @@ public class MsgTypeUtil {
 		this.likeNum = likeNum;
 		this.imgPath = imgPath;
 		this.musicPath = musicPath;
+		this.musicLegth=musicLegth;
 	}
 }

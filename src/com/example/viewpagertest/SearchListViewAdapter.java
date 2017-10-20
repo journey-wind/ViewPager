@@ -1,8 +1,12 @@
 package com.example.viewpagertest;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import com.ringdroid.soundfile.CheapSoundFile;
 
 import android.app.Activity;
 import android.content.Context;
@@ -44,7 +48,9 @@ public class SearchListViewAdapter extends BaseAdapter implements OnClickListene
 	    }else{
 	        for(String key : data){  
 	        	String temp =key.substring(key.lastIndexOf("/"));
-	            if(!TextUtils.isEmpty(key) && temp.contains(query)){  
+	            if(!TextUtils.isEmpty(key) && temp.toLowerCase()
+	            		.substring(temp.lastIndexOf("/")+1)
+	            		.contains(query.toLowerCase())){  
 	                queryData.add(key);  
 	            }  
 	        }  
@@ -89,9 +95,18 @@ public class SearchListViewAdapter extends BaseAdapter implements OnClickListene
 		
 		String mFilename=queryData.get(arg0);
 		SongMetadataReader metadataReader = new SongMetadataReader((Activity) arg1.getContext(), mFilename);
+		CheapSoundFile mSoundFile=null;
+		
         String mTitle = metadataReader.mTitle;
         String mArtist = metadataReader.mFilename;
         mArtist=mArtist.substring(mArtist.lastIndexOf('.')+1);
+        
+        //int aa = metadataReader.mTime;
+//        if(aa<=0){
+//        	queryData.remove(arg0);
+//        	notifyDataSetChanged();
+//        }
+        //mArtist=Integer.toString(aa);
 		tv1.setText(mTitle);
 		tv2.setText(mArtist+"нд╪Ч");
 		Paint mp = new Paint();

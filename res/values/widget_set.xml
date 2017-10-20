@@ -1,5 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
+    
+    
+        <declare-styleable name="recordView">
+        <attr name="hintText" format="string"/>
+        <attr name="playHintText" format="string"/>
+        <attr name="timeTextColor" format="reference"/>
+        <attr name="hintTextSize" format="dimension"/>
+        <attr name="middleLineHeight" format="dimension"/>
+        <attr name="progressSrc" format="reference"/>
+        <attr name="middleLineColor" format="reference"/>
+        <attr name="unit" format="string"/>
+        <attr name="model">
+            <enum name="record_model" value="1"/>
+            <enum name="play_model" value="2"/>
+        </attr>
+    </declare-styleable>
+    
+        <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="RoundColor">#DAF6FE</color>
+    <color name="TimeTextColor">#FF84AD</color>
+    <color name="RoundFillColor">#45C3E5</color>
+    <color name="RoundHintTextColor">#666666</color>
+    
+    
     <style name="MyEditText" parent="Theme.AppCompat.Light"> 
 	    <item name="colorControlNormal">@color/snow</item> 
 	    <item name="colorControlActivated">@color/floralwhite</item>
@@ -23,7 +49,7 @@
   	</style>
   	
     <style name="ToolbarBackground">
-	    <item name="android:background">#222233</item>
+	    <item name="android:background">#232323</item>
 	  </style>
 	  <style name="VerticalDividerLeft">
 	    <item name="android:layout_width">1px</item>
@@ -47,6 +73,12 @@
 	    <item name="android:layout_width">fill_parent</item>
 	    <item name="android:layout_height">1px</item>
 	    <item name="android:background">#000022</item>
+	  </style>
+	  
+	  <style name="HorizontalMessageBottom">
+	    <item name="android:layout_width">fill_parent</item>
+	    <item name="android:layout_height">2px</item>
+	    <item name="android:background">#dcdcdc</item>
 	  </style>
 	  	
 </resources>

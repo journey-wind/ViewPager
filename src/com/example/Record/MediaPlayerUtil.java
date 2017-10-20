@@ -1,6 +1,7 @@
 package com.example.Record;
 
 import java.io.IOException;
+import java.util.Timer;
 import java.util.TimerTask;
 
 import com.example.viewpagertest.MainActivity;
@@ -10,9 +11,11 @@ import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnBufferingUpdateListener;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnPreparedListener;
+import android.os.Handler;
 import android.os.Message;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.TextView;
 
 public class MediaPlayerUtil implements OnBufferingUpdateListener,  
 OnCompletionListener, OnPreparedListener{
@@ -20,59 +23,106 @@ OnCompletionListener, OnPreparedListener{
 	public static MediaPlayerUtil mInstance;
 	public SeekBar skbProgress;
 	private MediaPlayer mediaPlayer;
+	private Timer mTimer;
+	private TextView time;
 	
-	public synchronized static MediaPlayerUtil getInstance(SeekBar skbProgress){
+	public synchronized static MediaPlayerUtil getInstance(SeekBar skbProgress,TextView time){
         if(mInstance == null){
-            mInstance = new MediaPlayerUtil(skbProgress);
+            mInstance = new MediaPlayerUtil(skbProgress,time);
         }
-        mInstance.ChangeSeekBar(skbProgress);
+        mInstance.ChangeSeekBar(skbProgress,time);
         return mInstance;
     }
 	
-	public MediaPlayerUtil(SeekBar skbProgress){
+	public MediaPlayerUtil(SeekBar skbProgress,TextView time){
 		mediaPlayer = new MediaPlayer();
 		mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 		mediaPlayer.setOnPreparedListener(this);
 		mediaPlayer.setOnBufferingUpdateListener(this);
-		ChangeSeekBar(skbProgress);
+		ChangeSeekBar(skbProgress,time);
+		  
 	}
 	
+	
+    
+    Handler handleProgress = new Handler() {  
+        public void handleMessage(Message msg) {  
+  
+            int position = mediaPlayer.getCurrentPosition();  
+            int duration = mediaPlayer.getDuration();  
+
+		    String minute=String.format("%02d", position/1000/60);
+		    String second=String.format("%02d", position/1000%60);
+            if (duration > 0) {  
+            	time.setText(minute+":"+second);
+                long pos = (long) (skbProgress.getMax() * ((double)position / duration));  
+                skbProgress.setProgress((int) pos);  
+            }  
+        };  
+    };  
+    
 	public void Stop(){
 		if (mediaPlayer != null) {   
             mediaPlayer.stop();  
         }  
+		if(this.skbProgress!=null){
+			skbProgress.setProgress(0);  
+			this.skbProgress.setOnSeekBarChangeListener(null);
+		}
+		if(mTimer!=null){
+			mTimer.cancel();
+			mTimer=null;
+		}
+		if(time!=null){
+			time.setText("00:00");
+		}
 	}
 	
-	public void ChangeSeekBar(SeekBar skbProgress){
-		if (mediaPlayer != null) {   
-            mediaPlayer.stop();  
-        }  
+	public void ChangeSeekBar(SeekBar skbProgress,TextView time){
+		Stop();
+		this.time=time;
 		this.skbProgress=skbProgress;
 		skbProgress.setOnSeekBarChangeListener(new MySeekbar());
 	}
 	
 	public void Prepared(String url){
+		mTimer=new Timer();
+		TimerTask mTimerTask = new TimerTask() {  
+	        @Override  
+	        public void run() {  
+	            if(mediaPlayer==null)  
+	                return;  
+	            if (mediaPlayer.isPlaying() && skbProgress.isPressed() == false) {  
+	                handleProgress.sendEmptyMessage(0);  
+	            }  
+	        }  
+	    };  
 		boolean isError=false;
+		String aa = "";
+		mTimer.schedule(mTimerTask, 0, 200);
 		 try {  
-	            mediaPlayer.reset();   
-	            mediaPlayer.setDataSource(url);  
+	            mediaPlayer.reset();  
+	            mediaPlayer.setDataSource(url);
 	            mediaPlayer.prepare();//prepare之后自动播放  
 	        } catch (IllegalArgumentException e) {  
 	            // TODO Auto-generated catch block  
 	            e.printStackTrace();  
+	            aa=e.getMessage();
 	            isError=true;
 	        } catch (IllegalStateException e) {  
 	            // TODO Auto-generated catch block  
 	            e.printStackTrace();  
+	            aa=e.getMessage();
 	            isError=true;
 	        } catch (IOException e) {  
 	            // TODO Auto-generated catch block  
 	            e.printStackTrace();  
+	            aa=e.getMessage();
 	            isError=true;
 	        }  
 		 if(isError){
 			 Message msgg = MainActivity.mainHand.obtainMessage();
-			msgg.obj=null;
+			msgg.obj=aa;
 			msgg.what = 4;
 			MainActivity.mainHand.sendMessage(msgg);// 结果返回
 		 }

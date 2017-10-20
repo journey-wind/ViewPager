@@ -28,7 +28,7 @@ public class BackService  {
 	private static final String TAG = "BackService";
 	private static final long HEART_BEAT_RATE = 30 * 1000;
 
-	public static final String HOST = "192.168.1.116";// "192.168.1.21";//
+	public static final String HOST = "192.168.1.103";// "192.168.1.21";//
 	public static final int PORT = 2233;
 	
 	public static final String MESSAGE_ACTION="org.feng.message_ACTION";
@@ -238,7 +238,7 @@ public class BackService  {
 							        b.putInt("FileChange", -101);
 							        msg.setData(b);
 							        AddMsgActivity.selectHand.sendMessage(msg);
-								}else if(message.indexOf("end")>=0){
+								}else if(message.indexOf("<<5>>")>=0){
 									tempStr+=message;
 									String[] temp =tempStr.split("<<3>>");
 									Message msg = SocialMessage.socialHandl.obtainMessage();
@@ -248,14 +248,18 @@ public class BackService  {
 									tempStr="";
 									//close();
 								}else if(message.indexOf("<<3>>") > 0){
-//									message.split("<<3>>");
-//									Message msg = SocialMessage.socialHandl.obtainMessage();
-//									msg.obj = message;
-//									msg.what = 1;
-//									SocialMessage.socialHandl.sendMessage(msg);// 结果返回
 									tempStr+=message;
-								}else if(message.equals("")){
-									
+								}else if(message.indexOf("<<6>>")>=0){
+									tempStr+=message;
+									String[] temp =tempStr.split("<<4>>");
+									Message msg = SocialMessage.socialHandl.obtainMessage();
+									msg.obj = temp;
+									msg.what = 5;
+									SocialMessage.socialHandl.sendMessage(msg);// 结果返回
+									tempStr="";
+									//close();
+								}else if(message.indexOf("<<4>>") > 0){
+									tempStr+=message;
 								}
 								
 								

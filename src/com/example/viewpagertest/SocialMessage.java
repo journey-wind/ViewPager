@@ -45,10 +45,14 @@ public class SocialMessage implements OnItemClickListener, com.example.viewpager
 	public static SocThread socketTh;
 	DateFormat df;
 	private String newTimer;
+	private boolean isLoad;
+	private String oldTimer;
 	
 	public SocialMessage(Context context, View view){
 		this.context=context;
 		newTimer="000000000000";
+		oldTimer="000000000000";
+		isLoad=false;
 		this.view=view;
 		socialHandl=new SocialHandler();
 		data=new ArrayList<MsgTypeUtil>();
@@ -56,6 +60,32 @@ public class SocialMessage implements OnItemClickListener, com.example.viewpager
 //		socketTh=new SocThread();
 //		socketTh.start();
 		InitView();
+		loadLocalData();
+	}
+
+	private void loadLocalData() {
+		// TODO Auto-generated method stub
+    	String temp1 = MainActivity.sharedPreferences.getString("LastMessageOne", "");
+		String temp2 = MainActivity.sharedPreferences.getString("LastMessageTwo", "");
+		String temp3 = MainActivity.sharedPreferences.getString("LastMessageThree", "");
+		String temp4 = MainActivity.sharedPreferences.getString("LastMessageFour", "");
+		String temp5 = MainActivity.sharedPreferences.getString("LastMessageFive", "");
+		String temp6 = MainActivity.sharedPreferences.getString("LastMessageSix", "");
+		String temp7 = MainActivity.sharedPreferences.getString("LastMessageSeven", "");
+		String sumTemp=temp7+temp6+temp5+temp4+temp3+temp2+temp1+"<<5>>";
+		if(sumTemp!=""){
+			String[] temp=sumTemp.split("<<3>>");
+			Message msg1 = SocialMessage.socialHandl.obtainMessage();
+			msg1.obj = temp;
+			msg1.what = 2;
+			SocialMessage.socialHandl.sendMessage(msg1);// 结果返回
+		}
+		if(sumTemp.equals("end")){
+			Message msg1 = SocialMessage.socialHandl.obtainMessage();
+			msg1.obj = null;
+			msg1.what = 3;
+			SocialMessage.socialHandl.sendMessage(msg1);// 结果返回
+		}
 	}
 
 	private void InitView(){
@@ -93,10 +123,10 @@ public class SocialMessage implements OnItemClickListener, com.example.viewpager
 			@Override
 			public void onRefresh() {
 				// TODO Auto-generated method stub
-				swipeRefreshView.setRefreshing(true);
-		        String date= df.format(new Date());  
-				String str ="GetNewMessage:"+date+":"+newTimer;
-				MainActivity.msgServer.sendMsg(str);
+				Message msg1 = SocialMessage.socialHandl.obtainMessage();
+    			  msg1.obj = null;
+    			  msg1.what = 3;
+    			  SocialMessage.socialHandl.sendMessage(msg1);// 结果返回
 			}
 		});
 		
@@ -109,22 +139,18 @@ public class SocialMessage implements OnItemClickListener, com.example.viewpager
 		              @Override
 		              public void run() {
 
+		            	  if(!isLoad){
 		                  // 添加数据
-		          		  MsgTypeUtil mtu = new MsgTypeUtil("user", "171008184701", "测试3", 
-		          				"10", "10", null, baseMusicPath+"test.mp3");
-		          		  data.add(mtu);
-		          		  mtu = new MsgTypeUtil("user", "171008184701", "测试3", 
-		  					"10", "10", null, "");
-		  				  data.add(mtu);
-		  				  mtu = new MsgTypeUtil("user", "171008184701", "测试3", 
-		  						"10", "10", null, "");
-		  				  data.add(mtu);
-		  		
-		                  msgAdapter.RefreshAndSave();
-		                  Toast.makeText(SocialMessage.this.context, "加载了" + 5 + "条数据", Toast.LENGTH_SHORT).show();
-
+		            		  isLoad=true;
+		            		  Message msg1 = SocialMessage.socialHandl.obtainMessage();
+		          			  msg1.obj = null;
+		          			  msg1.what = 4;
+		          			  SocialMessage.socialHandl.sendMessage(msg1);// 结果返回
+		          			  isLoad=false;
+		            	  }
 		                  // 加载完数据设置为不加载状态，将加载进度收起来
 		                  swipeRefreshView.setLoading(false);
+		            	  
 		              }
 		          }, 1200);
 			}
@@ -151,17 +177,20 @@ public class SocialMessage implements OnItemClickListener, com.example.viewpager
 				MsgTypeUtil mtu=null;
 				String[] temp = (String[]) msg.obj;
 				for (String string : temp) {
-					if(string.equals("end")){
+					string=myTrim(string,"\r");
+					if(string.equals("<<5>>")){
 						continue;
 					}
 					String[] music = string.split("/");
 					mtu =new MsgTypeUtil(music[1], music[0], music[2].trim(), 
-							"10", "10", null, baseMusicPath+music[3].trim());
+							"10", "10", null, baseMusicPath+music[3].trim(),music[4].trim());
 					data.add(0, mtu);
 					sum++;
 				}
-				newTimer=data.get(0).time;
-				swipeRefreshView.setRefreshing(false);
+				if(data.size()>0){
+					newTimer=data.get(0).time;//获取最新的时间
+					oldTimer=data.get(data.size()-1).time;
+				}
 				if(sum==0){
 					Toast.makeText(context, "已是最新消息", Toast.LENGTH_SHORT).show();
 				}else{
@@ -170,8 +199,60 @@ public class SocialMessage implements OnItemClickListener, com.example.viewpager
 				msgAdapter.RefreshAndSave();
 				sum=0;
 				swipeRefreshView.setRefreshing(false);
+				isLoad=false;
+			}else if(msg.what == 3){
+				//发送获取new消息给服务器
+				isLoad=true;
+				swipeRefreshView.setRefreshing(true);
+		        String date= df.format(new Date());  
+				String str ="GetNewMessage:"+date+":"+newTimer;
+				MainActivity.msgServer.sendMsg(str);
+			}else if(msg.what == 4){
+				//发送获取Old消息给服务器
+				isLoad=true;
+				swipeRefreshView.setRefreshing(true);
+				String str ="GetOldMessage:"+oldTimer;
+				MainActivity.msgServer.sendMsg(str);
+			}else if(msg.what == 5){
+				MsgTypeUtil mtu=null;
+				String[] temp = (String[]) msg.obj;
+				for (String string : temp) {
+					string=myTrim(string,"\r");
+					if(string.equals("<<6>>")){
+						continue;
+					}
+					String[] music = string.split("/");
+					mtu =new MsgTypeUtil(music[1], music[0], music[2].trim(), 
+							"10", "10", null, baseMusicPath+music[3].trim(),music[4].trim());
+					data.add(mtu);
+					sum++;
+				}
+				if(data.size()>0){
+					newTimer=data.get(0).time;//获取最新的时间
+					oldTimer=data.get(data.size()-1).time;
+				}
+				if(sum==0){
+					Toast.makeText(context, "无消息", Toast.LENGTH_SHORT).show();
+				}else{
+					Toast.makeText(context, "共更新了"+sum+"条信息", Toast.LENGTH_SHORT).show();
+				}
+				msgAdapter.RefreshAndSave();
+				sum=0;
+				swipeRefreshView.setRefreshing(false);
+				isLoad=false;
 			}
 			super.handleMessage(msg);
+		}
+		private String myTrim(String string, String c) {
+			// TODO Auto-generated method stub
+			String temp=string;
+			if(temp.substring(0, 1).equals(c)){
+				temp=temp.substring(1);
+			}
+			if(temp.substring(temp.length()-1, temp.length()).equals(c)){
+				temp=temp.substring(0,temp.length()-1);
+			}
+			return temp;
 		}
 		
 	}
@@ -187,7 +268,7 @@ public class SocialMessage implements OnItemClickListener, com.example.viewpager
 		ViewHolder holder=(ViewHolder)v.getTag();
 		if(holder.musicPath!=null || holder.musicPath!=""){
 			
-			MediaPlayerUtil.getInstance(holder.sb_music);
+			MediaPlayerUtil.getInstance(holder.sb_music,holder.tv_musicPoint);
 			
 			MediaPlayerUtil.mInstance.Prepared(holder.musicPath);
 		}

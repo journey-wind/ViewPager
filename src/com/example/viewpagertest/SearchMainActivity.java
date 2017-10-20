@@ -11,6 +11,7 @@ import java.util.TimerTask;
 
 import com.example.Record.AudioUtil;
 import com.example.ViewClass.ClearEditText;
+import com.example.ViewClass.RecordView;
 import com.example.viewpagertest.MediaFile.MediaFileType;
 import com.example.viewpagertest.R.layout;
 import com.example.viewpagertest.SearchListViewAdapter.Callback;
@@ -64,7 +65,7 @@ import android.widget.ZoomControls;
 public class SearchMainActivity extends Activity implements Callback , OnItemClickListener{
 
 	public static Handler hand;
-	private TimerCal timerT;
+	//private TimerCal timerT;
 	private Thread MyThread;
 	private boolean isPressImage;
 	private boolean isLoopText;
@@ -78,7 +79,8 @@ public class SearchMainActivity extends Activity implements Callback , OnItemCli
 	private RelativeLayout historyLayout;
 //	private LinearLayout resultLayout;
 	private ImageView imageExit;
-	private ImageView soundAdd;
+	private RecordView soundAdd;
+	private RelativeLayout soundAddLayout;
 	private String fromStr;
 	private int sumSecond;
 	private SwipeRefreshLayout sfl;
@@ -97,9 +99,11 @@ public class SearchMainActivity extends Activity implements Callback , OnItemCli
         }
 		
 		hand=new MyHandler();
-		
-		RecordTime = (TextView)findViewById(R.id.SearchTime);
-		soundAdd=(ImageView)findViewById(R.id.soundRecord);
+		AudioUtil.getInstance();
+		//RecordTime = (TextView)findViewById(R.id.SearchTime);
+		//soundAdd=(ImageView)findViewById(R.id.soundRecord);
+		soundAdd = (RecordView) findViewById(R.id.recordView);
+		soundAddLayout = (RelativeLayout) findViewById(R.id.RecordLayout);
 		imageExit=(ImageView)findViewById(R.id.searchImageExit);
 		historyLayout=(RelativeLayout)findViewById(R.id.historyLayout);
 //		resultLayout=(LinearLayout)findViewById(R.id.resultLayout);
@@ -188,13 +192,15 @@ public class SearchMainActivity extends Activity implements Callback , OnItemCli
 			int vis =b.getInt("viewControl");
 			switch (vis) {
 			case 0:
-				soundAdd.setVisibility(View.VISIBLE);
+				//soundAdd.setVisibility(View.VISIBLE);
+				soundAddLayout.setVisibility(View.VISIBLE);
 				break;
 			case 1:
-				soundAdd.setVisibility(View.GONE);
+				//soundAdd.setVisibility(View.GONE);
+				soundAddLayout.setVisibility(View.GONE);
 				break;
 			case 2:
-				RecordTime.setText(String.format("%02d：%02d", (Integer)(sumSecond/60),(Integer)(sumSecond%60)));
+				//RecordTime.setText(String.format("%02d：%02d", (Integer)(sumSecond/60),(Integer)(sumSecond%60)));
 				break;
 			default:
 				break;
@@ -214,24 +220,25 @@ public class SearchMainActivity extends Activity implements Callback , OnItemCli
 			// TODO Auto-generated method stub
 			
 			switch (arg0.getId()) {
-			case R.id.soundRecord:
+			case R.id.recordView:
 					switch (arg1.getAction()) {
 					case MotionEvent.ACTION_DOWN:
-						timerT = new TimerCal();
-						MyThread = new Thread(timerT);
-						MyThread.start();
-						RecordTime.setVisibility(View.VISIBLE);
+						//timerT = new TimerCal();
+						//MyThread = new Thread(timerT);
+						//MyThread.start();
+						//RecordTime.setVisibility(View.VISIBLE);
 						isPressImage=true;
 						isLoopText=true;
 						AudioUtil.mInstance.startRecord();
 						break;
 					case MotionEvent.ACTION_CANCEL:
 					case MotionEvent.ACTION_UP:
-						RecordTime.setVisibility(View.GONE);
-						soundAdd.setVisibility(View.GONE);
+						//RecordTime.setVisibility(View.GONE);
+						//soundAdd.setVisibility(View.GONE);
+						soundAddLayout.setVisibility(View.GONE);
 						isLoopText=false;
 						isPressImage =false;
-						RecordTime.setText("00：00");
+						//RecordTime.setText("00：00");
 						showInputDialog();
 						AudioUtil.mInstance.stopRecord();
 						
@@ -245,73 +252,74 @@ public class SearchMainActivity extends Activity implements Callback , OnItemCli
 			default:
 				break;
 			}
-			if(isPressImage){
-				if (arg1.getAction()==MotionEvent.ACTION_UP) {
-					RecordTime.setVisibility(View.GONE);
-					isLoopText=false;
-					isPressImage=false;
-					RecordTime.setText("00：00");
-				}
-			}
-			return true;
+//			if(isPressImage){
+//				if (arg1.getAction()==MotionEvent.ACTION_UP) {
+//					RecordTime.setVisibility(View.GONE);
+//					isLoopText=false;
+//					isPressImage=false;
+//					RecordTime.setText("00：00");
+//				}
+//			}
+			return false;
 		}
 	}
 	
-	class TimerCal implements Runnable {
-		
-		private int startHour;
-		private int startMinute;
-		private int startSecond;
-		private Message msg;
-		private Bundle b;
-		private Time t;
-		public TimerCal(){
-			t=new Time();
-			 // or Time t=new Time("GMT+8"); 加上Time Zone资料。  
-			t.setToNow(); // 取得系统时间。  
-			startHour=t.hour;
-			startMinute=t.minute;
-			startSecond=t.second;
-		}
-		@Override
-		public void run() {
-			// TODO Auto-generated method stub
-			while(isLoopText){
-				
-				t.setToNow(); // 取得系统时间。  
-				int hour = t.hour; // 0-23  
-				int minute = t.minute;  
-				int second = t.second;
-				sumSecond = (hour-startHour)*3600+(minute-startMinute)*60+(second-startSecond);
-				msg = new Message(); 
-		        b = new Bundle();
-		        b.putInt("viewControl", 2);
-		        msg.setData(b);
-		        hand.sendMessage(msg);
-		        try {
-					Thread.sleep(300);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		}
-		
-	}
+//	class TimerCal implements Runnable {
+//		
+//		private int startHour;
+//		private int startMinute;
+//		private int startSecond;
+//		private Message msg;
+//		private Bundle b;
+//		private Time t;
+//		public TimerCal(){
+//			t=new Time();
+//			 // or Time t=new Time("GMT+8"); 加上Time Zone资料。  
+//			t.setToNow(); // 取得系统时间。  
+//			startHour=t.hour;
+//			startMinute=t.minute;
+//			startSecond=t.second;
+//		}
+//		@Override
+//		public void run() {
+//			// TODO Auto-generated method stub
+//			while(isLoopText){
+//				
+//				t.setToNow(); // 取得系统时间。  
+//				int hour = t.hour; // 0-23  
+//				int minute = t.minute;  
+//				int second = t.second;
+//				sumSecond = (hour-startHour)*3600+(minute-startMinute)*60+(second-startSecond);
+//				msg = new Message(); 
+//		        b = new Bundle();
+//		        b.putInt("viewControl", 2);
+//		        msg.setData(b);
+//		        hand.sendMessage(msg);
+//		        try {
+//					Thread.sleep(300);
+//				} catch (InterruptedException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//			}
+//		}
+//		
+//	}
 	
 	private void showInputDialog() {
 	    /*@setView 装入一个EditView
 	     */
-		fileName ="testtt";
+		fileName ="test";
 	    final EditText editText = new EditText(SearchMainActivity.this);
-	    editText.setText(fileName);
+	    editText.setHint("请输入文件名字");
 	    AlertDialog.Builder inputDialog = 
 	        new AlertDialog.Builder(SearchMainActivity.this);
-	    inputDialog.setTitle("请输入文件的名字").setView(editText);
+	    inputDialog.setView(editText);
 	    inputDialog.setPositiveButton("确定", 
 	        new DialogInterface.OnClickListener() {
 	        @Override
 	        public void onClick(DialogInterface dialog, int which) {
+	        	fileName=editText.getText().toString();
 	        	AudioUtil.mInstance.SetFileName(fileName);
 	        	AudioUtil.mInstance.convertWaveFile();
 	            Toast.makeText(SearchMainActivity.this,
@@ -321,7 +329,8 @@ public class SearchMainActivity extends Activity implements Callback , OnItemCli
 	            SendToChoose(frequencyList.size()-1);
 	            SearchMainActivity.this.finish();
 	        }
-	    }).show();
+	    });
+	    inputDialog.setNegativeButton("取消",null).show();
 	}
 	
 	@Override
@@ -342,18 +351,23 @@ public class SearchMainActivity extends Activity implements Callback , OnItemCli
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
+	private boolean isGone;
 	@Override
 	public boolean dispatchTouchEvent(MotionEvent ev) {
 		// TODO Auto-generated method stub
 		if (ev.getAction() == MotionEvent.ACTION_DOWN) {  
 	        View v = soundAdd;  
 	        //判断是否碰触在view上
-	        if (isShouldHideInput(v, ev)) {  
-	  
-	            soundAdd.setVisibility(View.GONE);
-	        }  
-	        return super.dispatchTouchEvent(ev);  
+	        if(soundAddLayout.getVisibility()!=View.GONE){
+	        	if (isShouldHideInput(v, ev)) { 
+		            //soundAdd.setVisibility(View.GONE);
+		            soundAddLayout.setVisibility(View.GONE);
+		            return true;
+		        }  
+	        	
+	        }
+	        return super.dispatchTouchEvent(ev);
+	        //return true;
 	    }  
 	    // 必不可少，否则所有的组件都不会有TouchEvent了  
 	    if (getWindow().superDispatchTouchEvent(ev)) {  
@@ -365,7 +379,7 @@ public class SearchMainActivity extends Activity implements Callback , OnItemCli
 	}
 	
 	public  boolean isShouldHideInput(View v, MotionEvent event) {  
-	    if (v != null && (v instanceof ImageView)) {  
+	    if (v != null && (v instanceof RecordView)) {  
 	        int[] leftTop = { 0, 0 };  
 	        //获取输入框当前的location位置  
 	        v.getLocationInWindow(leftTop);  
@@ -516,8 +530,10 @@ public class SearchMainActivity extends Activity implements Callback , OnItemCli
 	@Override
 	public void click(View v) {
 		// TODO Auto-generated method stub
-		frequencyList.remove(Integer.parseInt(v.getTag().toString()));
-		historyAdapter.notifyDataSetChanged();
+		if(soundAddLayout.getVisibility()==View.GONE){
+			frequencyList.remove(Integer.parseInt(v.getTag().toString()));
+			historyAdapter.notifyDataSetChanged();
+		}
 		
 	}
 	private void SendToChoose(int index){
@@ -535,9 +551,10 @@ public class SearchMainActivity extends Activity implements Callback , OnItemCli
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 		// TODO Auto-generated method stub
-		MainActivity.firstMisicPath=frequencyList.get(arg2);
-		SendToChoose(arg2);
-		this.finish();
-		
+		if(soundAddLayout.getVisibility()==View.GONE){
+			MainActivity.firstMisicPath=frequencyList.get(arg2);
+			SendToChoose(arg2);
+			this.finish();
+		}
 	}
 }

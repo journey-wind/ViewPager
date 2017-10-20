@@ -32,6 +32,8 @@ public class MsgListViewAdapter extends BaseAdapter implements OnClickListener{
 	    public ImageView iv_head;
 	    public TextView tv_name;
 	    public TextView tv_time;
+	    public TextView tv_musicPoint;
+	    public TextView tv_musicDuring;
 	    public TextView tv_content;
 	    public TextView tv_LisenNum;
 	    public TextView tv_likeNum;
@@ -116,6 +118,8 @@ public class MsgListViewAdapter extends BaseAdapter implements OnClickListener{
 	        holder.tv_content = (TextView)arg1.findViewById(R.id.tv_content);
 	        holder.tv_likeNum = (TextView)arg1.findViewById(R.id.tv_likeNum);
 	        holder.tv_LisenNum = (TextView)arg1.findViewById(R.id.tv_LisenNum);
+	        holder.tv_musicPoint = (TextView)arg1.findViewById(R.id.tv_musicPoint);
+	        holder.tv_musicDuring = (TextView)arg1.findViewById(R.id.tv_musicDuring);
 	        holder.tv_name = (TextView)arg1.findViewById(R.id.tv_name);
 	        holder.tv_time = (TextView)arg1.findViewById(R.id.tv_time);
 	        holder.iv_play.setOnClickListener(this);
@@ -139,9 +143,17 @@ public class MsgListViewAdapter extends BaseAdapter implements OnClickListener{
 	    //holder.iv_head.setVisibility(View.GONE);
 	    //holder.sb_music.setVisibility(View.GONE);
 	    String timeStr=compareToNowDate(data.get(arg0).time);
-	   
+	    String minute="00";
+	    String second="00";
+	    if(!data.get(arg0).musicLegth.equals("")){
+		    int during =Integer.parseInt(data.get(arg0).musicLegth);
+		    minute=String.format("%02d", during/1000/60);
+		    second=String.format("%02d", during/1000%60);
+	    }
+	    
 	    holder.tv_name.setText(data.get(arg0).name);
 	    holder.tv_time.setText(timeStr);
+	    holder.tv_musicDuring.setText("/"+minute+":"+second);
 	    holder.tv_content.setText(data.get(arg0).context);
 	    holder.tv_likeNum.setText(data.get(arg0).likeNum);
 	    holder.musicPath=data.get(arg0).musicPath;
@@ -190,8 +202,9 @@ public class MsgListViewAdapter extends BaseAdapter implements OnClickListener{
 				diff = passDate.getTime() - nowDate.getTime();     
 				time_str=getStringForTime(diff);
 				if(time_str==""){
-					time_str=passDate.getHours()+":"+
-							passDate.getMinutes();
+					time_str=String.format("%02d:%02d", passDate.getHours(),
+														passDate.getMinutes());
+
 				}
 			}
 		} catch (ParseException e) {

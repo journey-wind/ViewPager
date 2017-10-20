@@ -94,7 +94,6 @@ public class AudioUtil {
     public void stopRecord(){
         isRecording = false;
         recorder.stop();
-        recorder=null;
     }
 
     //将数据写入文件夹,文件的写入没有做优化

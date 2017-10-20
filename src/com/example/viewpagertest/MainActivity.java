@@ -53,9 +53,9 @@ public class MainActivity extends ActionBarActivity {
 		setContentView(R.layout.activity_main);
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        sharedPreferences = getSharedPreferences("myshare",Activity.MODE_PRIVATE);
         InitTextView();
 		InitViewPager();
-		sharedPreferences = getSharedPreferences("myshare",Activity.MODE_PRIVATE);
 		msgServer=new BackService();
 		mainHand=new MainHandler();
 		imgUser=(ImageView)findViewById(R.id.imgUser);
@@ -92,6 +92,14 @@ public class MainActivity extends ActionBarActivity {
 			}else if(msg.what == 6){
 				int i = (Integer)msg.obj;
 //				Toast.makeText(getApplicationContext(), "共更新了"+i+"条信息", Toast.LENGTH_SHORT).show();
+			}else if(msg.what == 7){
+				Intent intent = new Intent(); 
+			     intent.setClass(MainActivity.this, SearchMainActivity.class);
+			     //MainActivity.this.startActivity(intent);
+			     intent.putExtra("from", "Main");
+		         startActivity(intent);  
+			}else if(msg.what == 6){
+				Toast.makeText(getApplicationContext(), "切割失败", Toast.LENGTH_SHORT).show();
 			}
 			super.handleMessage(msg);
 		}
@@ -184,33 +192,11 @@ public class MainActivity extends ActionBarActivity {
 			@Override
 			public void onPageSelected(int arg0) {
 				// TODO Auto-generated method stub
-				if(isFirst && arg0==1){
-            		Message msg = SocialMessage.socialHandl.obtainMessage();
-    				msg.obj = null;
-    				msg.what = 1;
-    				SocialMessage.socialHandl.sendMessage(msg);// 结果返回
-	            	String temp1 = MainActivity.sharedPreferences.getString("LastMessageOne", "");
-	    			String temp2 = MainActivity.sharedPreferences.getString("LastMessageTwo", "");
-	    			String temp3 = MainActivity.sharedPreferences.getString("LastMessageThree", "");
-	    			String temp4 = MainActivity.sharedPreferences.getString("LastMessageFour", "");
-	    			String temp5 = MainActivity.sharedPreferences.getString("LastMessageFive", "");
-	    			String temp6 = MainActivity.sharedPreferences.getString("LastMessageSix", "");
-	    			String temp7 = MainActivity.sharedPreferences.getString("LastMessageSeven", "");
-	    			String sumTemp=temp1+temp2+temp3+temp4+temp5+temp6+temp7+"end";
-	    			if(sumTemp!=""){
-	    				String[] temp=sumTemp.split("<<3>>");
-	    				Message msg1 = SocialMessage.socialHandl.obtainMessage();
-	    				msg1.obj = temp;
-	    				msg1.what = 2;
-	    				SocialMessage.socialHandl.sendMessage(msg1);// 结果返回
-	    			}
-	    			if(sumTemp.equals("end")){
-	    					SimpleDateFormat df = new SimpleDateFormat("yyMMddHHmmss");
-	    					String date= df.format(new Date());  
-	    					String stt ="GetNewMessage:"+date;
-	    					MainActivity.msgServer.sendMsg(stt);
-	    			}
-	    			isFirst=false;
+				if(arg0==1){
+					Message msg1 = SocialMessage.socialHandl.obtainMessage();
+					msg1.obj = null;
+					msg1.what = 3;
+					SocialMessage.socialHandl.sendMessage(msg1);// 结果返回
             	}
 			}
 			
@@ -241,11 +227,10 @@ public class MainActivity extends ActionBarActivity {
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
-			Intent intent = new Intent(); 
-		     intent.setClass(MainActivity.this, SearchMainActivity.class);
-		     //MainActivity.this.startActivity(intent);
-		     intent.putExtra("from", "Main");
-	            startActivity(intent);  
+			Message msg = mainHand.obtainMessage();
+			msg.obj = null;
+			msg.what = 7;
+			mainHand.sendMessage(msg);// 结果返回
 			return true;
 		}
 		return super.onOptionsItemSelected(item);

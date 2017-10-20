@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"  
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"  
     xmlns:app="http://schemas.android.com/apk/res-auto"  
     android:id="@+id/rly_content"  
     android:layout_width="match_parent"  
@@ -9,9 +9,9 @@
     android:orientation="vertical"  
     android:paddingBottom="4dp"  
     android:descendantFocusability="beforeDescendants"  
-    android:background="@color/snow"  
-     android:paddingLeft="8dip"  
-    android:paddingRight="8dip"  
+    android:background="?android:attr/selectableItemBackground"   
+     android:paddingLeft="4dp"  
+    android:paddingRight="4dp"  
     android:paddingTop="6dp" >  
   
     <LinearLayout  
@@ -76,12 +76,7 @@
                 android:paddingLeft="10dip"  
                 android:paddingRight="10dip" >  
   
-                <View  
-                    android:id="@+id/view_line"  
-                    android:layout_width="match_parent"  
-                    android:layout_height="1.5dip"  
-                    android:layout_marginBottom="8dip"  
-                    android:background="@color/black" />  
+                
                 
             </RelativeLayout>  
         </RelativeLayout>  
@@ -108,6 +103,7 @@
             android:visibility="visible"  
              />  
              <TextView 
+                 android:id="@+id/tv_musicPoint"
                  android:layout_width="wrap_content"  
             	android:layout_height="wrap_content"  
             	android:layout_marginTop="9dp"
@@ -115,6 +111,7 @@
                 android:textColor="@color/black"  
                 android:textSize="12sp"/>
              <TextView 
+                 android:id="@+id/tv_musicDuring"
                  android:layout_width="wrap_content"  
             	android:layout_height="wrap_content"  
             	android:layout_marginTop="9dp"
@@ -182,5 +179,5 @@
             </LinearLayout>  
         </RelativeLayout>  
     </LinearLayout>  
-  
-</RelativeLayout> 
+  <LinearLayout style="@style/HorizontalMessageBottom" />
+</LinearLayout> 
