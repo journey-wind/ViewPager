@@ -38,7 +38,7 @@ public class ChoosePagerView extends ViewPager{
 		int dirButtom=dip2px(this.getContext(),(float)124);
 		int dirTop=dip2px(this.getContext(),(float)50);
 		if(ev.getY()>=dirTop&&ev.getY()<=this.getHeight()-dirButtom
-					&& curPosition==1 && !DrawWaveForm.isFirst){
+					&& curPosition==1 && !DrawWaveForm.isFirst ){
 			getParent().requestDisallowInterceptTouchEvent(true);
 			noScroll=true;
 		}

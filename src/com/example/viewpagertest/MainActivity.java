@@ -98,8 +98,14 @@ public class MainActivity extends ActionBarActivity {
 			     //MainActivity.this.startActivity(intent);
 			     intent.putExtra("from", "Main");
 		         startActivity(intent);  
-			}else if(msg.what == 6){
+			}else if(msg.what == 8){
 				Toast.makeText(getApplicationContext(), "«–∏Ó ß∞‹", Toast.LENGTH_SHORT).show();
+			}else if(msg.what == 9){
+				Intent intent = new Intent(); 
+			     intent.setClass(MainActivity.this, SearchMainActivity.class);
+			     //MainActivity.this.startActivity(intent);
+			     intent.putExtra("from", "Synthesis");
+		         startActivity(intent);  
 			}
 			super.handleMessage(msg);
 		}

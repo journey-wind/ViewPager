@@ -108,11 +108,11 @@ public class RecordPlay implements OnClickListener{
 	{
 		
 		// AudioRecord 得到录制最小缓冲区的大小
-		m_in_buf_size = AudioRecord.getMinBufferSize(8000,
+		m_in_buf_size = AudioRecord.getMinBufferSize(16000,
 				AudioFormat.CHANNEL_CONFIGURATION_MONO,
 				AudioFormat.ENCODING_PCM_16BIT);
 		// 实例化播放音频对象
-		m_in_rec = new AudioRecord(MediaRecorder.AudioSource.MIC, 8000,
+		m_in_rec = new AudioRecord(MediaRecorder.AudioSource.MIC, 16000,
 				AudioFormat.CHANNEL_CONFIGURATION_MONO,
 				AudioFormat.ENCODING_PCM_16BIT, m_in_buf_size);
 		// 实例化一个字节数组，长度为最小缓冲区的长度
@@ -121,11 +121,11 @@ public class RecordPlay implements OnClickListener{
 		m_in_q = new LinkedList<byte[]>();
 
 		// AudioTrack 得到播放最小缓冲区的大小
-		m_out_buf_size = AudioTrack.getMinBufferSize(8000,
+		m_out_buf_size = AudioTrack.getMinBufferSize(16000,
 				AudioFormat.CHANNEL_CONFIGURATION_MONO,
 				AudioFormat.ENCODING_PCM_16BIT);
 		// 实例化播放音频对象
-		m_out_trk = new AudioTrack(AudioManager.STREAM_MUSIC, 8000,
+		m_out_trk = new AudioTrack(AudioManager.STREAM_MUSIC, 16000,
 				AudioFormat.CHANNEL_CONFIGURATION_MONO,
 				AudioFormat.ENCODING_PCM_16BIT, m_out_buf_size,
 				AudioTrack.MODE_STREAM);
@@ -255,14 +255,11 @@ public class RecordPlay implements OnClickListener{
 	                    new Rect(0, 0, width, height));// 关键:获取画布  
             	canvas.drawColor(Color.BLACK);// 清除背景  
             	for (int i = 1; i < bytes_pkg.length; i++) {
-            		if(i >= width){
-            			break;
-            		}
             		if(i%2==1){
             			continue;
             		}
             		canvas.drawLine((int)(def*i), (bytes_pkg[i-1]+height/2), (int)(def*i), height, mPaint);
-            	}
+            	} 
             	
             	sfh.unlockCanvasAndPost(canvas);	
             	

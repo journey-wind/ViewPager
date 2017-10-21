@@ -111,7 +111,14 @@ public class SearchMainActivity extends Activity implements Callback , OnItemCli
 		sfl=(SwipeRefreshLayout)findViewById(R.id.srlSearch);
 		sfl.measure(0,0);
    	 	sfl.setRefreshing(true);
-//		editSearch.setOnEditorActionListener(new returnKeyDeal());
+   	 	listView = (ListView)findViewById(R.id.listSearch);
+//		editSearch.setOnEditorActionListener(new returnKeyDeal());\
+	   	 if(fromStr.equals("Synthesis")&&synthesisMusic.data.size()>0){
+	   		historyAdapter =new SearchListViewAdapter(SearchMainActivity.this, frequencyList , SearchMainActivity.this); 
+            listView.setAdapter(historyAdapter);
+            listView.setOnItemClickListener(SearchMainActivity.this);
+            sfl.setRefreshing(false);
+		 }else{
 		 new Handler().postDelayed(new Runnable() {  
              @Override  
              public void run() {  
@@ -121,9 +128,9 @@ public class SearchMainActivity extends Activity implements Callback , OnItemCli
                  listView.setOnItemClickListener(SearchMainActivity.this);
                  sfl.setRefreshing(false);
              }  
-         }, 2500);  
+         }, 1200);  
+		 }
 		
-		listView = (ListView)findViewById(R.id.listSearch);
 		soundAdd.setOnTouchListener(new AddSoundClick());
         editSearch.addTextChangedListener(new TextWatcher() {
 			
@@ -537,14 +544,24 @@ public class SearchMainActivity extends Activity implements Callback , OnItemCli
 		
 	}
 	private void SendToChoose(int index){
-		Message msg = new Message(); 
-        Bundle b = new Bundle();
-        b.putInt("FileChange", index);
-        msg.setData(b);
+		
         if(fromStr.equals("Main")){
+        	Message msg = new Message(); 
+            Bundle b = new Bundle();
+            b.putInt("FileChange", index);
+            msg.setData(b);
         	MainChooseActivity.changeFile.sendMessage(msg);
         }else if(fromStr.equals("AddMsg")){
+        	Message msg = new Message(); 
+            Bundle b = new Bundle();
+            b.putInt("FileChange", index);
+            msg.setData(b);
         	AddMsgActivity.selectHand.sendMessage(msg);
+        }else if(fromStr.equals("Synthesis")){
+        	Message msg = MainActivity.mainHand.obtainMessage();
+        	msg.obj=index;
+			msg.what = 1;
+			synthesisMusic.myHander.sendMessage(msg);// ½á¹û·µ»Ø
         }
 	}
 

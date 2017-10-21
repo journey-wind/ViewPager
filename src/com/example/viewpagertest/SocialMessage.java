@@ -158,12 +158,6 @@ public class SocialMessage implements OnItemClickListener, com.example.viewpager
         
 	}
 
-	private void updateMessage() {
-		// TODO Auto-generated method stub
-		String mess;
-		mess="GetNewMessage";
-		MainActivity.msgServer.sendMsg(mess);
-	}
 	class SocialHandler extends Handler{
 		private int sum=0;
 		@Override
@@ -206,13 +200,23 @@ public class SocialMessage implements OnItemClickListener, com.example.viewpager
 				swipeRefreshView.setRefreshing(true);
 		        String date= df.format(new Date());  
 				String str ="GetNewMessage:"+date+":"+newTimer;
-				MainActivity.msgServer.sendMsg(str);
+				if(!MainActivity.msgServer.sendMsg(str)){
+					isLoad=false;
+					Message msg1 = MainActivity.mainHand.obtainMessage();
+	    			  msg1.obj = null;
+	    			  msg1.what = 3;
+	    			  MainActivity.mainHand.sendMessage(msg1);// 结果返回
+				}
 			}else if(msg.what == 4){
 				//发送获取Old消息给服务器
-				isLoad=true;
 				swipeRefreshView.setRefreshing(true);
 				String str ="GetOldMessage:"+oldTimer;
-				MainActivity.msgServer.sendMsg(str);
+				if(!MainActivity.msgServer.sendMsg(str)){
+					Message msg1 = MainActivity.mainHand.obtainMessage();
+	    			  msg1.obj = null;
+	    			  msg1.what = 3;
+	    			  MainActivity.mainHand.sendMessage(msg1);// 结果返回
+				}
 			}else if(msg.what == 5){
 				MsgTypeUtil mtu=null;
 				String[] temp = (String[]) msg.obj;

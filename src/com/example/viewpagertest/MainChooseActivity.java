@@ -99,7 +99,7 @@ public class MainChooseActivity extends ViewGroup {
 //		SoundRecord tt =new SoundRecord(listViews.get(0).getContext(), null,listViews.get(0));
 		RecordPlay tt =new RecordPlay(listViews.get(0));
 		dwf =new DrawWaveForm(listViews.get(1).getContext(), null,listViews.get(1),path);
-		
+		synthesisMusic sm=new synthesisMusic(listViews.get(2).getContext(),listViews.get(2));
 		//t2 =new DrawWaveForm(listViews.get(1).getContext(), null,listViews.get(1),"/storage/emulated/0/bbbb.mp3");
 		mPager.setOnPageChangeListener(new MyOnPageChangeListener()); 
 		

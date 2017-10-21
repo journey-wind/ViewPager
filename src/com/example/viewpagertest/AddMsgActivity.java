@@ -70,6 +70,10 @@ public class AddMsgActivity extends Activity {
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
+				if(selectMusic==null||selectMusic.equals("")){
+					Toast.makeText(getApplicationContext(), "«ÎÃÌº”“ª ◊“Ù¿÷", Toast.LENGTH_SHORT).show();
+					return;
+				}
 				loading = new Loading_view(AddMsgActivity.this,R.style.CustomDialog);
 			    loading.show();
 			    loadTv=loading.GetLoadText();

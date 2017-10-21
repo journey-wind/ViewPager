@@ -9,6 +9,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.SeekBar.OnSeekBarChangeListener;
@@ -38,6 +39,7 @@ public class MsgListViewAdapter extends BaseAdapter implements OnClickListener{
 	    public TextView tv_LisenNum;
 	    public TextView tv_likeNum;
 	    public SeekBar sb_music;
+	    public LinearLayout ll_hasMusic;
 	    public String musicPath; 
 	}
 	private ArrayList<MsgTypeUtil> data;
@@ -122,6 +124,7 @@ public class MsgListViewAdapter extends BaseAdapter implements OnClickListener{
 	        holder.tv_musicDuring = (TextView)arg1.findViewById(R.id.tv_musicDuring);
 	        holder.tv_name = (TextView)arg1.findViewById(R.id.tv_name);
 	        holder.tv_time = (TextView)arg1.findViewById(R.id.tv_time);
+	        holder.ll_hasMusic = (LinearLayout)arg1.findViewById(R.id.ll_hasMusic);
 	        holder.iv_play.setOnClickListener(this);
 	        holder.iv_play.setTag(holder);
 //	        		new OnClickListener() {
