@@ -106,7 +106,15 @@ public class MainActivity extends ActionBarActivity {
 			     //MainActivity.this.startActivity(intent);
 			     intent.putExtra("from", "Synthesis");
 		         startActivity(intent);  
+			}else if(msg.what == 10){
+				Toast.makeText(getApplicationContext(), "选择的文件类型不一样", Toast.LENGTH_SHORT).show();
+			}else if(msg.what == 11){
+				String aa= (String)msg.obj;
+				Toast.makeText(getApplicationContext(), "拼接成功,文件地址："+aa, Toast.LENGTH_SHORT).show();
+			}else if(msg.what == 12){
+				Toast.makeText(getApplicationContext(), "拼接失败", Toast.LENGTH_SHORT).show();
 			}
+			
 			super.handleMessage(msg);
 		}
 		

@@ -14,10 +14,13 @@ import com.example.ViewClass.MySwipeRefresh.OnLoadListener;
 import com.example.viewpagertest.MsgListViewAdapter.ViewHolder;
 import com.example.viewpagertest.SearchListViewAdapter.Callback;
 
+import android.R.integer;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences.Editor;
+import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnCompletionListener;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -37,7 +40,7 @@ public class SocialMessage implements OnItemClickListener, com.example.viewpager
 	private View view;
 	private ListView msgList;
 	private MsgListViewAdapter msgAdapter;
-	private ArrayList<MsgTypeUtil> data;
+	public static ArrayList<MsgTypeUtil> data;
 	private ImageView msgAdd;
 	public static Handler socialHandl;
 	private String baseMusicPath = "http://192.168.1.103/music/";
@@ -269,12 +272,27 @@ public class SocialMessage implements OnItemClickListener, com.example.viewpager
 	@Override
 	public void click(View v) {
 		// TODO Auto-generated method stub
-		ViewHolder holder=(ViewHolder)v.getTag();
+		final ViewHolder holder=(ViewHolder)v.getTag();
 		if(holder.musicPath!=null || holder.musicPath!=""){
+			if(holder.isfirst){
+				int t = Integer.parseInt(data.get(holder.index).lisenNum.toString());
+				t++;
+				data.get(holder.index).lisenNum=String.valueOf(t);
+				msgAdapter.notifyDataSetChanged();
+				holder.isplay=true;
+				//MediaPlayerUtil.getInstance(holder.sb_music,holder.tv_musicPoint);
+				MediaPlayerUtil.getInstance(holder);
+				MediaPlayerUtil.mInstance.Prepared();
+
+				holder.isfirst=false;
+			}else if(holder.isplay){
+				MediaPlayerUtil.mInstance.mediaPlayer.pause();
+				holder.isplay=false;
+			}else if(!holder.isplay){
+				MediaPlayerUtil.mInstance.mediaPlayer.start();
+				holder.isplay=true;
+			}
 			
-			MediaPlayerUtil.getInstance(holder.sb_music,holder.tv_musicPoint);
-			
-			MediaPlayerUtil.mInstance.Prepared(holder.musicPath);
 		}
 	}
 }

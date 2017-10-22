@@ -27,7 +27,7 @@ public class MsgListViewAdapter extends BaseAdapter implements OnClickListener{
 
 
 
-	static class ViewHolder
+	public static class ViewHolder
 	{
 		public ImageView iv_play;
 	    public ImageView iv_head;
@@ -41,6 +41,9 @@ public class MsgListViewAdapter extends BaseAdapter implements OnClickListener{
 	    public SeekBar sb_music;
 	    public LinearLayout ll_hasMusic;
 	    public String musicPath; 
+	    public int index;
+	    public boolean isplay;
+	    public boolean isfirst;
 	}
 	private ArrayList<MsgTypeUtil> data;
 	private LayoutInflater mInflater=null;
@@ -127,17 +130,8 @@ public class MsgListViewAdapter extends BaseAdapter implements OnClickListener{
 	        holder.ll_hasMusic = (LinearLayout)arg1.findViewById(R.id.ll_hasMusic);
 	        holder.iv_play.setOnClickListener(this);
 	        holder.iv_play.setTag(holder);
-//	        		new OnClickListener() {
-//				
-//				@Override
-//				public void onClick(View arg0) {
-//					// TODO Auto-generated method stub
-//					if(holder.musicPath!=null || holder.musicPath!=""){
-//						MediaPlayerUtil.getInstance(holder.sb_music);
-//						MediaPlayerUtil.mInstance.Prepared(holder.musicPath);
-//					}
-//				}
-//			});
+	        holder.isplay=true;
+		    holder.isfirst=true;
 	        arg1.setTag(holder);
 	    }else
 	    {
@@ -159,7 +153,11 @@ public class MsgListViewAdapter extends BaseAdapter implements OnClickListener{
 	    holder.tv_musicDuring.setText("/"+minute+":"+second);
 	    holder.tv_content.setText(data.get(arg0).context);
 	    holder.tv_likeNum.setText(data.get(arg0).likeNum);
+	    holder.tv_LisenNum.setText(data.get(arg0).lisenNum);
 	    holder.musicPath=data.get(arg0).musicPath;
+	    
+	    
+	    holder.index = arg0;
 		
 		return arg1;
 	}

@@ -5,6 +5,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import com.example.viewpagertest.MainActivity;
+import com.example.viewpagertest.MsgListViewAdapter.ViewHolder;
+import com.example.viewpagertest.SocialMessage;
 
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -22,24 +24,26 @@ OnCompletionListener, OnPreparedListener{
 
 	public static MediaPlayerUtil mInstance;
 	public SeekBar skbProgress;
-	private MediaPlayer mediaPlayer;
+	public MediaPlayer mediaPlayer;
 	private Timer mTimer;
 	private TextView time;
+	ViewHolder holder;
 	
-	public synchronized static MediaPlayerUtil getInstance(SeekBar skbProgress,TextView time){
+	public synchronized static MediaPlayerUtil getInstance(ViewHolder holders){
         if(mInstance == null){
-            mInstance = new MediaPlayerUtil(skbProgress,time);
+            mInstance = new MediaPlayerUtil(holders);
         }
-        mInstance.ChangeSeekBar(skbProgress,time);
+        mInstance.ChangeSeekBar(holders.sb_music,holders.tv_musicPoint);
         return mInstance;
     }
 	
-	public MediaPlayerUtil(SeekBar skbProgress,TextView time){
+	public MediaPlayerUtil(ViewHolder holders){
 		mediaPlayer = new MediaPlayer();
 		mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 		mediaPlayer.setOnPreparedListener(this);
 		mediaPlayer.setOnBufferingUpdateListener(this);
-		ChangeSeekBar(skbProgress,time);
+		this.holder=holders;
+		ChangeSeekBar(holder.sb_music,holder.tv_musicPoint);
 		  
 	}
 	
@@ -62,6 +66,10 @@ OnCompletionListener, OnPreparedListener{
     };  
     
 	public void Stop(){
+		if(holder!=null){
+			holder.isplay=true;
+			holder.isfirst=true;
+		}
 		if (mediaPlayer != null) {   
             mediaPlayer.stop();  
         }  
@@ -84,15 +92,15 @@ OnCompletionListener, OnPreparedListener{
 		this.skbProgress=skbProgress;
 		skbProgress.setOnSeekBarChangeListener(new MySeekbar());
 	}
-	
-	public void Prepared(String url){
+
+	public void Prepared(){
 		mTimer=new Timer();
 		TimerTask mTimerTask = new TimerTask() {  
 	        @Override  
 	        public void run() {  
 	            if(mediaPlayer==null)  
 	                return;  
-	            if (mediaPlayer.isPlaying() && skbProgress.isPressed() == false) {  
+	            if (mediaPlayer.isPlaying() && skbProgress.isPressed() == false ) {  
 	                handleProgress.sendEmptyMessage(0);  
 	            }  
 	        }  
@@ -102,7 +110,7 @@ OnCompletionListener, OnPreparedListener{
 		mTimer.schedule(mTimerTask, 0, 200);
 		 try {  
 	            mediaPlayer.reset();  
-	            mediaPlayer.setDataSource(url);
+	            mediaPlayer.setDataSource(holder.musicPath);
 	            mediaPlayer.prepare();//prepare之后自动播放  
 	        } catch (IllegalArgumentException e) {  
 	            // TODO Auto-generated catch block  
@@ -127,7 +135,7 @@ OnCompletionListener, OnPreparedListener{
 			MainActivity.mainHand.sendMessage(msgg);// 结果返回
 		 }
 	}
-	
+
 	class MySeekbar implements OnSeekBarChangeListener {  
 		int progress;  
         public void onProgressChanged(SeekBar seekBar, int progress,  
@@ -141,7 +149,7 @@ OnCompletionListener, OnPreparedListener{
         }  
   
         public void onStopTrackingTouch(SeekBar seekBar) {  
-        	mediaPlayer.seekTo(progress);  
+        		mediaPlayer.seekTo(progress);  
         }  
 	
 	}
