@@ -7,11 +7,13 @@ import java.util.List;
 
 import com.example.Record.CaoZuoMp3Utils;
 import com.example.Record.CaoZuoWavUtils;
+import com.example.ViewClass.CommomDialog;
 import com.example.ViewClass.DragListView;
 import com.example.ViewClass.Loading_view;
 import com.example.ViewClass.DragListView.DragItemChangeListener;
 import com.example.viewpagertest.SynthesisListViewAdapter.Callback;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
@@ -73,19 +75,30 @@ public class synthesisMusic implements Callback {
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-				if(data.size()>1){
-					loading = new Loading_view(context,R.style.CustomDialog);
-				    loading.show();
-				    loadTv=loading.GetLoadText();
-				    loadTv.setText("拼接ing。。。");
-					new Handler().postDelayed(new Runnable() {  
-			             @Override  
-			             public void run() {  
-			            	 beOneMusic();
-			             }  
-			         }, 1000);
-					
-				}
+				new CommomDialog(context, R.style.dialog, "确定合成选定音频文件？\n*mp3与wav文件无法一起合成", new CommomDialog.OnCloseListener() {
+					@Override
+					public void onClick(Dialog dialog, boolean confirm) {
+						// TODO Auto-generated method stub
+						if(confirm){
+							if(data.size()>1){
+								loading = new Loading_view(context,R.style.CustomDialog);
+							    loading.show();
+							    loadTv=loading.GetLoadText();
+							    loadTv.setText("拼接ing。。。");
+								new Handler().postDelayed(new Runnable() {  
+						             @Override  
+						             public void run() {  
+						            	 beOneMusic();
+						             }  
+						         }, 1000);
+								
+							}
+				               dialog.dismiss();
+				         }
+					}
+				})
+				        .setTitle("提示").show();
+				
 			}
 		});
 		imgbtnAdd.setOnClickListener(new OnClickListener() {

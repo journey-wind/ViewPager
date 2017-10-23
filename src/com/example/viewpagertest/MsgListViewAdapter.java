@@ -41,6 +41,7 @@ public class MsgListViewAdapter extends BaseAdapter implements OnClickListener{
 	    public SeekBar sb_music;
 	    public LinearLayout ll_hasMusic;
 	    public String musicPath; 
+	    public String time;
 	    public int index;
 	    public boolean isplay;
 	    public boolean isfirst;
@@ -140,6 +141,7 @@ public class MsgListViewAdapter extends BaseAdapter implements OnClickListener{
 	    //holder.iv_head.setVisibility(View.GONE);
 	    //holder.sb_music.setVisibility(View.GONE);
 	    String timeStr=compareToNowDate(data.get(arg0).time);
+	    holder.time=data.get(arg0).time;
 	    String minute="00";
 	    String second="00";
 	    if(!data.get(arg0).musicLegth.equals("")){

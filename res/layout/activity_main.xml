@@ -5,63 +5,6 @@
     android:orientation="vertical" 
     android:background="#d3d3d3">  
     
-	<android.support.v7.widget.Toolbar
-	  android:id="@+id/toolbar"
-	  android:layout_height="wrap_content"
-	  android:layout_width="fill_parent"
-	  android:paddingRight="10dp"
-	  android:background="#cc0000"
-	   >
-	  
-	    <LinearLayout  
-        android:id="@+id/linearLayout1"  
-        android:layout_width="40dp"  
-        android:layout_height="40dp"  
-         >  
-		    <ImageView  
-		        android:id="@+id/imgUser"
-		        android:layout_width="fill_parent"  
-		        android:layout_height="fill_parent"  
-		        android:src="@drawable/tempp" 
-	        />  
-	    </LinearLayout>
-	  <LinearLayout  
-        android:layout_width="fill_parent"  
-        android:layout_height="wrap_content"  
-         >  
-  
-        <TextView  
-            android:id="@+id/text1"  
-            android:layout_width="fill_parent"  
-            android:layout_height="wrap_content"  
-            android:layout_weight="1.0"  
-            android:gravity="center"  
-            android:text="页卡1"  
-            android:textColor="#8FFFFF"  
-            android:textSize="18.0dip" />  
-  
-        <TextView  
-            android:id="@+id/text2"  
-            android:layout_width="fill_parent"  
-            android:layout_height="wrap_content"  
-            android:layout_weight="1.0"  
-            android:gravity="center"  
-            android:text="页卡2"  
-            android:textColor="#4FFFFF"  
-            android:textSize="18.0dip" />  
-  
-    </LinearLayout>  
-   
-	</android.support.v7.widget.Toolbar>
-	
-        
-    <com.example.ViewClass.MainPageView 
-		android:id="@+id/vPager1"  
-        android:layout_width="wrap_content"  
-        android:layout_height="wrap_content"  
-        android:layout_gravity="center"  
-        android:layout_weight="1.0"  
-        android:background="#FFFFFF"  
-        android:flipInterval="30"  
-        android:persistentDrawingCache="animation" />  
+     <include layout="@layout/custom_drawerlayout" />   
+    
 </LinearLayout>

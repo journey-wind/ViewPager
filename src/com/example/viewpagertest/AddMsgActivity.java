@@ -70,6 +70,11 @@ public class AddMsgActivity extends Activity {
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
+				String person=MainActivity.personName;
+				if(person==null||person.equals("")){
+					Toast.makeText(getApplicationContext(), "请输入用户名", Toast.LENGTH_SHORT).show();
+					return;
+				}
 				if(selectMusic==null||selectMusic.equals("")){
 					Toast.makeText(getApplicationContext(), "请添加一首音乐", Toast.LENGTH_SHORT).show();
 					return;
@@ -80,7 +85,7 @@ public class AddMsgActivity extends Activity {
 				 
 				DateFormat df = new SimpleDateFormat("yyMMddHHmmss");  
 		        String date= df.format(new Date());  
-				String str = date +"/user/"+messageEdit.getText().toString()+"/";
+				String str = date +"/"+person+"/"+messageEdit.getText().toString()+"/";
 				String path="";
 				String musicLength="";
 				if(!(selectMusic==null || selectMusic.equals(""))){

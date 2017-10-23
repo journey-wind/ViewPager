@@ -11,6 +11,8 @@
     <string name="passWord">1212345</string>
     <string name="dbName">MusicMessage</string>
     <string name="dbURL">jdbc:jtds:sqlserver://192.168.1.102:1433/MusicMessage</string>
+    <string name="submit">确定</string>
+    <string name="cancel">取消</string>
 
 <!--      Edit activity -->
 

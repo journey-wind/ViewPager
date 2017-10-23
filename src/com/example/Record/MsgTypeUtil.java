@@ -5,7 +5,7 @@ public class MsgTypeUtil {
 	public String toString() {
 		// TODO Auto-generated method stub
 		String musicName =  musicPath.substring(musicPath.lastIndexOf("/")+1);
-		String temp = time+"/"+name+"/"+context+" /"+musicName+" /"+musicLegth+" /<<3>>";
+		String temp = time+"/"+name+"/"+context+" /"+musicName+" /"+musicLegth+" /"+lisenNum+"/<<3>>";
 		return temp;
 	}
 

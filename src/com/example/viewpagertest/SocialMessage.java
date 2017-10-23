@@ -179,10 +179,20 @@ public class SocialMessage implements OnItemClickListener, com.example.viewpager
 						continue;
 					}
 					String[] music = string.split("/");
+					int i;
+					for(i=0;i<data.size();i++){
+						if(data.get(i).time.equals(music[0])){
+							data.get(i).lisenNum=music[5];
+							break;
+						}
+					}
+					if(i==data.size()){
 					mtu =new MsgTypeUtil(music[1], music[0], music[2].trim(), 
-							"10", "10", null, baseMusicPath+music[3].trim(),music[4].trim());
+							music[5], music[5], null, baseMusicPath+music[3].trim(),music[4].trim());
 					data.add(0, mtu);
 					sum++;
+					}
+					
 				}
 				if(data.size()>0){
 					newTimer=data.get(0).time;//获取最新的时间
@@ -202,7 +212,7 @@ public class SocialMessage implements OnItemClickListener, com.example.viewpager
 				isLoad=true;
 				swipeRefreshView.setRefreshing(true);
 		        String date= df.format(new Date());  
-				String str ="GetNewMessage:"+date+":"+newTimer;
+				String str ="GetNewMessage:"+date+":"+oldTimer+":"+data.size();
 				if(!MainActivity.msgServer.sendMsg(str)){
 					isLoad=false;
 					Message msg1 = MainActivity.mainHand.obtainMessage();
@@ -213,7 +223,7 @@ public class SocialMessage implements OnItemClickListener, com.example.viewpager
 			}else if(msg.what == 4){
 				//发送获取Old消息给服务器
 				swipeRefreshView.setRefreshing(true);
-				String str ="GetOldMessage:"+oldTimer;
+				String str ="GetOldMessage:"+newTimer+":"+data.size();
 				if(!MainActivity.msgServer.sendMsg(str)){
 					Message msg1 = MainActivity.mainHand.obtainMessage();
 	    			  msg1.obj = null;
@@ -229,10 +239,20 @@ public class SocialMessage implements OnItemClickListener, com.example.viewpager
 						continue;
 					}
 					String[] music = string.split("/");
+					int i;
+					for(i=0;i<data.size();i++){
+						if(data.get(i).time.equals(music[0])){
+							data.get(i).lisenNum=music[5];
+							break;
+						}
+					}
+					if(i==data.size()){
 					mtu =new MsgTypeUtil(music[1], music[0], music[2].trim(), 
-							"10", "10", null, baseMusicPath+music[3].trim(),music[4].trim());
-					data.add(mtu);
+							music[5], music[5], null, baseMusicPath+music[3].trim(),music[4].trim());
+					data.add(0, mtu);
 					sum++;
+					}
+					
 				}
 				if(data.size()>0){
 					newTimer=data.get(0).time;//获取最新的时间
@@ -269,6 +289,17 @@ public class SocialMessage implements OnItemClickListener, com.example.viewpager
 		
 	}
 
+	private void sendListenNum(String time){
+		String str="Listen:"+time;
+		if(!MainActivity.msgServer.sendMsg(str)){
+			Message msg = MainActivity.mainHand.obtainMessage();
+			msg.obj = null;
+			msg.what = 1;
+			MainActivity.mainHand.sendMessage(msg);// 结果返回
+		}
+		return;
+	}
+	
 	@Override
 	public void click(View v) {
 		// TODO Auto-generated method stub
@@ -278,7 +309,8 @@ public class SocialMessage implements OnItemClickListener, com.example.viewpager
 				int t = Integer.parseInt(data.get(holder.index).lisenNum.toString());
 				t++;
 				data.get(holder.index).lisenNum=String.valueOf(t);
-				msgAdapter.notifyDataSetChanged();
+				msgAdapter.RefreshAndSave();
+				sendListenNum(holder.time);
 				holder.isplay=true;
 				//MediaPlayerUtil.getInstance(holder.sb_music,holder.tv_musicPoint);
 				MediaPlayerUtil.getInstance(holder);

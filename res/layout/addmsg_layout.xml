@@ -50,14 +50,15 @@
     android:orientation="vertical"
     android:background="@color/floralwhite"
      >
+	   
 	   <LinearLayout  
         android:layout_width="fill_parent"  
         android:layout_height="wrap_content"  
         android:orientation="horizontal"
+        android:layout_weight="1"
         android:gravity="right"
         android:background="@color/floralwhite"
          >
-         
          <TextView
             android:id="@+id/textWoridNum"
 	        android:layout_width="wrap_content"

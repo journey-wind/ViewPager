@@ -17,19 +17,28 @@ import com.example.ViewClass.Loading_view;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.DrawerLayout.DrawerListener;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.InputFilter;
+import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,6 +54,12 @@ public class MainActivity extends ActionBarActivity {
      public static BackService msgServer;
      public static Handler mainHand;
      private ImageView imgUser;
+	private DrawerLayout mDrawerLayout;
+	private TextView textName;
+	private EditText editName;
+	private Button btnSave;
+	private Button btnModify;
+	public static String personName;
      public static boolean isFirst=true;
      
 	@Override
@@ -54,18 +69,92 @@ public class MainActivity extends ActionBarActivity {
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         sharedPreferences = getSharedPreferences("myshare",Activity.MODE_PRIVATE);
+        personName = sharedPreferences.getString("personName", "");
         InitTextView();
 		InitViewPager();
 		msgServer=new BackService();
 		mainHand=new MainHandler();
 		imgUser=(ImageView)findViewById(R.id.imgUser);
-		
+		mDrawerLayout = (DrawerLayout)findViewById(R.id.dl_left);
+		textName=(TextView)findViewById(R.id.textName); 
+		textName.setText(personName);
+		editName=(EditText)findViewById(R.id.editName); 
+		editName.setFilters(new InputFilter[]{new InputFilter.LengthFilter(10)});
+		btnSave=(Button)findViewById(R.id.btnSave); 
+		btnSave.setEnabled(false);
+		btnModify=(Button)findViewById(R.id.btnModify); 
+		btnModify.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				btnSave.setEnabled(true);
+				btnModify.setEnabled(false);
+				String name = textName.getText().toString();
+				textName.setVisibility(View.GONE);
+				editName.setText(name);
+				editName.setVisibility(View.VISIBLE);
+			}
+		});
+		btnSave.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				btnModify.setEnabled(true);
+				btnSave.setEnabled(false);
+				String name = editName.getText().toString();
+				if(name.equals("")){
+					Toast.makeText(getApplicationContext(), "用户名不许为空", Toast.LENGTH_SHORT).show();
+					return;
+				}
+				Editor editor =sharedPreferences.edit();//获取编辑器
+				
+				editor.putString("personName", name);
+				editor.commit();
+				editName.setVisibility(View.GONE);
+				textName.setText(name);
+				textName.setVisibility(View.VISIBLE);
+			}
+		});
+		mDrawerLayout.setDrawerListener(new DrawerListener() {
+			
+			@Override
+			public void onDrawerStateChanged(int arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void onDrawerSlide(View arg0, float arg1) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void onDrawerOpened(View arg0) {
+				// TODO Auto-generated method stub
+				editName.setVisibility(View.GONE);
+				textName.setVisibility(View.VISIBLE);
+				btnModify.setEnabled(true);
+				btnSave.setEnabled(false);
+			}
+			
+			@Override
+			public void onDrawerClosed(View arg0) {
+				// TODO Auto-generated method stub
+				editName.setVisibility(View.GONE);
+				textName.setVisibility(View.VISIBLE);
+				btnModify.setEnabled(true);
+				btnSave.setEnabled(false);
+			}
+		});
 		imgUser.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-				
+				mDrawerLayout.openDrawer(Gravity.START);
 			}
 		});
 	}
@@ -76,7 +165,7 @@ public class MainActivity extends ActionBarActivity {
 		public void handleMessage(Message msg) {
 			// TODO Auto-generated method stub
 			if (msg.what == 1) {
-				Toast.makeText(getApplicationContext(), "发送失败", Toast.LENGTH_SHORT).show();;
+				Toast.makeText(getApplicationContext(), "发送失败", Toast.LENGTH_SHORT).show();
 			}else if(msg.what == 2){
 				Toast.makeText(getApplicationContext(), "发送成功", Toast.LENGTH_SHORT).show();
 			}else if(msg.what == 3){
