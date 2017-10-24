@@ -3,6 +3,8 @@ package com.example.viewpagertest;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.ViewClass.ChoosePagerView;
+
 import android.R.color;
 import android.R.drawable;
 import android.app.Activity;
@@ -94,7 +96,7 @@ public class MainChooseActivity extends ViewGroup {
 		listViews.add(mInflater.inflate(R.layout.lay2, null));
 		listViews.add(mInflater.inflate(R.layout.lay3, null));
 		mPager.setAdapter(new MyPagerAdapter(listViews));   
-		mPager.setCurrentItem(0);   
+		mPager.setCurrentItem(0);  
 		String path = MainActivity.firstMisicPath;
 //		SoundRecord tt =new SoundRecord(listViews.get(0).getContext(), null,listViews.get(0));
 		RecordPlay tt =new RecordPlay(listViews.get(0));

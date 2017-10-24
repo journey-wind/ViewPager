@@ -8,9 +8,11 @@ import java.util.Date;
 import com.example.Record.MsgTypeUtil;
 import com.example.Record.SocThread;
 import com.example.Record.SocThread.ReceiveType;
+import com.example.ViewClass.CommomDialog;
 import com.example.ViewClass.Loading_view;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.media.MediaPlayer;
@@ -70,56 +72,18 @@ public class AddMsgActivity extends Activity {
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-				String person=MainActivity.personName;
-				if(person==null||person.equals("")){
-					Toast.makeText(getApplicationContext(), "请输入用户名", Toast.LENGTH_SHORT).show();
-					return;
-				}
-				if(selectMusic==null||selectMusic.equals("")){
-					Toast.makeText(getApplicationContext(), "请添加一首音乐", Toast.LENGTH_SHORT).show();
-					return;
-				}
-				loading = new Loading_view(AddMsgActivity.this,R.style.CustomDialog);
-			    loading.show();
-			    loadTv=loading.GetLoadText();
-				 
-				DateFormat df = new SimpleDateFormat("yyMMddHHmmss");  
-		        String date= df.format(new Date());  
-				String str = date +"/"+person+"/"+messageEdit.getText().toString()+"/";
-				String path="";
-				String musicLength="";
-				if(!(selectMusic==null || selectMusic.equals(""))){
-					 String type=selectMusic.substring(selectMusic.lastIndexOf("."));
-					 path = date+type;
-				}
-				if(path.equals("")){
-					path=" ";	
-					musicLength=" ";
-				}else{
-					MediaPlayer mediaPlayer = new MediaPlayer();
-					try {
-						mediaPlayer.setDataSource(selectMusic);
-						mediaPlayer.prepare();
-						musicLength=String.valueOf(mediaPlayer.getDuration());
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-						musicLength="-1";
+				new CommomDialog(AddMsgActivity.this, R.style.dialog, "确定发送消息?", new CommomDialog.OnCloseListener() {
+					@Override
+					public void onClick(Dialog dialog, boolean confirm) {
+						// TODO Auto-generated method stub
+						
+						sendAndTosat(dialog);
+						
+				        
 					}
-				}
-				str=str+path+"/"+musicLength+"/<<1>>";
-				//stu.SendMessage(str, path);
-				//SocialMessage.socketTh.Send(str,ReceiveType.PushMessage);
+				})
+				        .setTitle("提示").show();
 				
-				
-				if(!MainActivity.msgServer.sendMsg(str)){
-					
-					Message msg = MainActivity.mainHand.obtainMessage();
-					msg.obj = null;
-					msg.what = 1;
-					MainActivity.mainHand.sendMessage(msg);// 结果返回
-					finish();
-				}
 				
 			}
 		});
@@ -165,6 +129,62 @@ public class AddMsgActivity extends Activity {
 		});
 	}
 
+	
+	private void sendAndTosat(Dialog dialog){
+		String person=MainActivity.personName;
+		if(person==null||person.equals("")){
+			Toast.makeText(getApplicationContext(), "请输入用户名", Toast.LENGTH_SHORT).show();
+			dialog.dismiss();
+			return;
+		}
+		if(selectMusic==null||selectMusic.equals("")){
+			Toast.makeText(getApplicationContext(), "请添加一首音乐", Toast.LENGTH_SHORT).show();
+			dialog.dismiss();
+			return;
+		}
+		dialog.dismiss();
+		loading = new Loading_view(AddMsgActivity.this,R.style.CustomDialog);
+	    loading.show();
+	    loadTv=loading.GetLoadText();
+		 
+		DateFormat df = new SimpleDateFormat("yyMMddHHmmss");  
+        String date= df.format(new Date());  
+		String str = date +"/"+person+"/"+messageEdit.getText().toString()+"/";
+		String path="";
+		String musicLength="";
+		if(!(selectMusic==null || selectMusic.equals(""))){
+			 String type=selectMusic.substring(selectMusic.lastIndexOf("."));
+			 path = date+type;
+		}
+		if(path.equals("")){
+			path=" ";	
+			musicLength=" ";
+		}else{
+			MediaPlayer mediaPlayer = new MediaPlayer();
+			try {
+				mediaPlayer.setDataSource(selectMusic);
+				mediaPlayer.prepare();
+				musicLength=String.valueOf(mediaPlayer.getDuration());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				musicLength="-1";
+			}
+		}
+		str=str+path+"/"+musicLength+"/<<1>>";
+		//stu.SendMessage(str, path);
+		//SocialMessage.socketTh.Send(str,ReceiveType.PushMessage);
+		
+		
+		if(!MainActivity.msgServer.sendMsg(str)){
+			
+			Message msg = MainActivity.mainHand.obtainMessage();
+			msg.obj = null;
+			msg.what = 1;
+			MainActivity.mainHand.sendMessage(msg);// 结果返回
+			//finish();
+		}
+	}
 	class AddMsgHandler extends Handler{
 
 		@Override

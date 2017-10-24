@@ -41,7 +41,7 @@ public class SocialMessage implements OnItemClickListener, com.example.viewpager
 	private ListView msgList;
 	private MsgListViewAdapter msgAdapter;
 	public static ArrayList<MsgTypeUtil> data;
-	private ImageView msgAdd;
+	public static ImageView msgAdd;
 	public static Handler socialHandl;
 	private String baseMusicPath = "http://192.168.1.103/music/";
 	public static MySwipeRefresh swipeRefreshView;

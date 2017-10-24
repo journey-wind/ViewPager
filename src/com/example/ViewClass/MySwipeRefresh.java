@@ -1,6 +1,7 @@
 package com.example.ViewClass;
 
 import com.example.viewpagertest.R;
+import com.example.viewpagertest.SocialMessage;
 
 import android.content.Context;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -8,7 +9,11 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.TranslateAnimation;
 import android.widget.AbsListView;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 public class MySwipeRefresh extends SwipeRefreshLayout{
@@ -69,15 +74,31 @@ public class MySwipeRefresh extends SwipeRefreshLayout{
 	private OnLoadListener mOnLoadListener;  
 	private boolean isLoading;
 	private View mListViewFooter;
+	private float oldY;
+	private boolean isUp=true;
+
 	  @Override
 	  public boolean dispatchTouchEvent(MotionEvent ev) {
 
 	      switch (ev.getAction()) {
 	          case MotionEvent.ACTION_DOWN:
 	              // 移动的起点
+	        	  oldY=ev.getY();
 	              mDownY = ev.getY();
 	              break;
 	          case MotionEvent.ACTION_MOVE:
+	        	  
+	        	  float k=ev.getY()-oldY;
+					oldY=ev.getY();
+					if(SocialMessage.msgAdd!=null){
+						if(k>2 && !isUp){
+							SocialMessage.msgAdd.startAnimation(animImgUp);
+							isUp=true;
+						}else if(k<-2&&isUp){
+							SocialMessage.msgAdd.startAnimation(animImgDown);
+							isUp=false;
+						}
+					}
 	        	  
 	              // 移动过程中判断时候能下拉加载更多
 	              if (canLoadMore()) {
@@ -94,6 +115,44 @@ public class MySwipeRefresh extends SwipeRefreshLayout{
 	      return super.dispatchTouchEvent(ev);
 	  }
 
+	  
+	  private AnimationSet animImgUp;
+		private AnimationSet animImgDown;
+		private void initAnimation() {
+			// TODO Auto-generated method stub
+			animImgUp = new AnimationSet(true);  
+	        TranslateAnimation translateAnimation = new TranslateAnimation(  
+	                //X轴初始位置  
+	                Animation.RELATIVE_TO_SELF, 0.0f,  
+	                //X轴移动的结束位置  
+	                Animation.RELATIVE_TO_SELF,0.0f,  
+	                //y轴开始位置  
+	                Animation.RELATIVE_TO_SELF,2.0f,  
+	                //y轴移动后的结束位置  
+	                Animation.RELATIVE_TO_SELF,0.0f);  
+
+	        translateAnimation.setDuration(1000);  
+	        //如果fillAfter的值为真的话，动画结束后，控件停留在执行后的状态  
+	        animImgUp.setFillAfter(true);  
+	        animImgUp.addAnimation(translateAnimation);  
+	        //down动画部分
+	        animImgDown = new AnimationSet(true);  
+	        translateAnimation = new TranslateAnimation(  
+	                //X轴初始位置  
+	                Animation.RELATIVE_TO_SELF, 0.0f,  
+	                //X轴移动的结束位置  
+	                Animation.RELATIVE_TO_SELF,0.0f,  
+	                //y轴开始位置  
+	                Animation.RELATIVE_TO_SELF,0.0f,  
+	                //y轴移动后的结束位置  
+	                Animation.RELATIVE_TO_SELF,-2.0f);  
+
+	        translateAnimation.setDuration(1000);  
+	        //如果fillAfter的值为真的话，动画结束后，控件停留在执行后的状态  
+	        animImgDown.setFillAfter(true);  
+	        animImgDown.addAnimation(translateAnimation); 
+		}
+	  
 	  /**
 	   * 判断是否满足加载更多条件
 	   *
@@ -170,6 +229,7 @@ public class MySwipeRefresh extends SwipeRefreshLayout{
 		// TODO Auto-generated constructor stub
 		mListViewFooter = LayoutInflater.from(context).inflate(R.layout.pull_layout, null,  
                 false);  
+		initAnimation();
 	}
 
 	public static interface OnLoadListener {  

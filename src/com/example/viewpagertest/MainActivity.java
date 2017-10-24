@@ -35,8 +35,12 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -44,6 +48,27 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends ActionBarActivity {
+
+	
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		// TODO Auto-generated method stub
+		if(imageMove&&SocialMessage.msgAdd!=null){
+			switch (event.getAction()) {
+			case MotionEvent.ACTION_UP:
+				
+				break;
+			case MotionEvent.ACTION_MOVE:
+				
+				break;
+	
+			default:
+				break;
+			}
+		}
+//		return super.onTouchEvent(event);
+		return true;
+	}
 
 	public static SharedPreferences sharedPreferences;
 	private ViewPager mPagerMain;//页卡内容
@@ -61,6 +86,7 @@ public class MainActivity extends ActionBarActivity {
 	private Button btnModify;
 	public static String personName;
      public static boolean isFirst=true;
+     public boolean imageMove;
      
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +96,7 @@ public class MainActivity extends ActionBarActivity {
         setSupportActionBar(toolbar);
         sharedPreferences = getSharedPreferences("myshare",Activity.MODE_PRIVATE);
         personName = sharedPreferences.getString("personName", "");
+        imageMove=false;
         InitTextView();
 		InitViewPager();
 		msgServer=new BackService();
@@ -158,6 +185,8 @@ public class MainActivity extends ActionBarActivity {
 			}
 		});
 	}
+
+	
 
 	class MainHandler extends Handler{
 
@@ -296,10 +325,13 @@ public class MainActivity extends ActionBarActivity {
 			public void onPageSelected(int arg0) {
 				// TODO Auto-generated method stub
 				if(arg0==1){
+					imageMove=true;
 					Message msg1 = SocialMessage.socialHandl.obtainMessage();
 					msg1.obj = null;
 					msg1.what = 3;
 					SocialMessage.socialHandl.sendMessage(msg1);// 结果返回
+            	}else{
+            		imageMove=false;
             	}
 			}
 			

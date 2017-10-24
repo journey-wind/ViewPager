@@ -87,6 +87,8 @@ public class RecordPlay implements OnClickListener{
         mPaint.setStrokeWidth(2);// …Ë÷√ª≠± ¥÷œ∏   
         bt_star = (Button) view.findViewById(R.id.button1);
 		bt_exit = (Button) view.findViewById(R.id.button3);
+		bt_exit.setEnabled(false);
+		bt_star.setEnabled(true);
 		bt_star.setOnClickListener(this);
 		bt_exit.setOnClickListener(this);
 		
@@ -213,8 +215,12 @@ public class RecordPlay implements OnClickListener{
             	canvas.drawColor(Color.BLACK);// «Â≥˝±≥æ∞  
             	sfv.getHolder().unlockCanvasAndPost(canvas);	
 			}
+			bt_exit.setEnabled(false);
+			bt_star.setEnabled(true);
 			break;
 		case R.id.button1:
+			bt_exit.setEnabled(true);
+			bt_star.setEnabled(false);
 			recordOnPlay();
 			break;
 			
