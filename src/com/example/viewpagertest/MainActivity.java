@@ -73,7 +73,7 @@ public class MainActivity extends ActionBarActivity {
 	public static SharedPreferences sharedPreferences;
 	private ViewPager mPagerMain;//页卡内容
      private List<View> listViewsMain; // Tab页面列表
-     private TextView t1Main,t2Main;// 页卡头标
+     private ImageView t1Main,t2Main;// 页卡头标
      private MainChooseActivity mca;
      public static String firstMisicPath;
      public static BackService msgServer;
@@ -133,6 +133,10 @@ public class MainActivity extends ActionBarActivity {
 				String name = editName.getText().toString();
 				if(name.equals("")){
 					Toast.makeText(getApplicationContext(), "用户名不许为空", Toast.LENGTH_SHORT).show();
+					return;
+				}
+				if(name.contains("<")||name.contains(">")){
+					Toast.makeText(getApplicationContext(), "用户名不能包含'<'或'>'", Toast.LENGTH_SHORT).show();
 					return;
 				}
 				Editor editor =sharedPreferences.edit();//获取编辑器
@@ -260,8 +264,8 @@ public class MainActivity extends ActionBarActivity {
 	
 	private void InitTextView() {   
 		
-		t1Main = (TextView) findViewById(R.id.text1);   
-		t2Main = (TextView) findViewById(R.id.text2);
+		t1Main = (ImageView) findViewById(R.id.text1);   
+		t2Main = (ImageView) findViewById(R.id.text2);
 		
 		t1Main.setOnClickListener(new OnClickListener() {
 			

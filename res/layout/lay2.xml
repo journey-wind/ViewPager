@@ -173,7 +173,7 @@
        android:layout_marginBottom="6dip"
        style="@android:style/MediaButton"
        android:contentDescription="@string/rewind"
-       android:src="@android:drawable/ic_media_previous" />
+       android:src="@drawable/prev" />
 
       <ImageButton android:id="@+id/play"
        android:layout_width="71dip"
@@ -182,7 +182,7 @@
        android:layout_marginBottom="6dip"
        style="@android:style/MediaButton"
        android:contentDescription="@string/play"
-       android:src="@android:drawable/ic_media_play" />
+       android:src="@drawable/play" />
 
       <ImageButton android:id="@+id/ffwd"
        android:layout_width="64dip"
@@ -192,7 +192,7 @@
        android:layout_marginBottom="6dip"
        style="@android:style/MediaButton"
        android:contentDescription="@string/ffwd"
-       android:src="@android:drawable/ic_media_next" />
+       android:src="@drawable/next" />
 	</LinearLayout>
      <LinearLayout style="@style/VerticalDividerLeft" />
       <LinearLayout style="@style/VerticalDividerRight" />
@@ -207,7 +207,8 @@
          android:layout_width="72dip"
          android:layout_height="52dip"
          android:layout_marginTop="5dip"
-         android:src="@drawable/menu_save"
+         style="@android:style/MediaButton"
+         android:src="@drawable/save"
          android:contentDescription="@string/save_button" />
       
     </LinearLayout>

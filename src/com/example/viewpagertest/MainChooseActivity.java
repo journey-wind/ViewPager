@@ -7,6 +7,7 @@ import com.example.ViewClass.ChoosePagerView;
 
 import android.R.color;
 import android.R.drawable;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -80,7 +81,9 @@ public class MainChooseActivity extends ViewGroup {
 		t1 = (TextView) view.findViewById(R.id.text4);   
 		t2 = (TextView) view.findViewById(R.id.text5);   
 		t3 = (TextView) view.findViewById(R.id.text6);   
-		 
+		t1.setTextColor(getResources().getColor(R.color.topcolor));
+		t2.setTextColor(getResources().getColor(R.color.silver2));
+		t3.setTextColor(getResources().getColor(R.color.silver2));
 		t1.setOnClickListener(new MyOnClickListener(0));   
 		t2.setOnClickListener(new MyOnClickListener(1));   
 		t3.setOnClickListener(new MyOnClickListener(2));   
@@ -190,6 +193,24 @@ public class MainChooseActivity extends ViewGroup {
 				animation.setFillAfter(true);// True:图片停在动画结束位置   
 				animation.setDuration(300);   
 				cursor.startAnimation(animation);   
+				
+				switch (currIndex) {
+				case 0:
+					t1.setTextColor(getResources().getColor(R.color.topcolor));
+					t2.setTextColor(getResources().getColor(R.color.silver2));
+					t3.setTextColor(getResources().getColor(R.color.silver2));
+					break;
+				case 1:
+					t2.setTextColor(getResources().getColor(R.color.topcolor));
+					t1.setTextColor(getResources().getColor(R.color.silver2));
+					t3.setTextColor(getResources().getColor(R.color.silver2));
+					break;
+				case 2:
+					t3.setTextColor(getResources().getColor(R.color.topcolor));
+					t2.setTextColor(getResources().getColor(R.color.silver2));
+					t1.setTextColor(getResources().getColor(R.color.silver2));
+					break;
+				}
 			}
 
 		}

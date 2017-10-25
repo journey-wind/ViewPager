@@ -19,8 +19,8 @@
 	            android:layout_height="wrap_content"  
 	            android:layout_weight="1.0"  
 	            android:gravity="center"  
-	            android:text="页卡4"  
-	            android:textColor="#8FFFFF"  
+	            android:text="边录边播"  
+	            android:textColor="#707070"  
 	            android:textSize="16.0dip" />  
 	  
 	        <TextView  
@@ -29,8 +29,8 @@
 	            android:layout_height="wrap_content"  
 	            android:layout_weight="1.0"  
 	            android:gravity="center"  
-	            android:text="页卡5"  
-	            android:textColor="#4FFFFF"  
+	            android:text="音频剪切"  
+	            android:textColor="#707070"  
 	            android:textSize="16.0dip" />  
 	  
 	        <TextView  
@@ -39,8 +39,8 @@
 	            android:layout_height="wrap_content"  
 	            android:layout_weight="1.0"  
 	            android:gravity="center"  
-	            android:text="页卡6"  
-	            android:textColor="#1FFFFF"  
+	            android:text="音频拼接"  
+	            android:textColor="#707070"  
 	            android:textSize="16.0dip" />  
 	    </LinearLayout>  
 	    

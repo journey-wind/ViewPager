@@ -5,6 +5,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import com.example.viewpagertest.MainActivity;
+import com.example.viewpagertest.R;
 import com.example.viewpagertest.MsgListViewAdapter.ViewHolder;
 import com.example.viewpagertest.SocialMessage;
 
@@ -33,17 +34,18 @@ OnCompletionListener, OnPreparedListener{
         if(mInstance == null){
             mInstance = new MediaPlayerUtil(holders);
         }
-        mInstance.ChangeSeekBar(holders.sb_music,holders.tv_musicPoint);
+        mInstance.ChangeSeekBar(holders);
         return mInstance;
     }
 	
 	public MediaPlayerUtil(ViewHolder holders){
 		mediaPlayer = new MediaPlayer();
 		mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+		mediaPlayer.setLooping(true);  
 		mediaPlayer.setOnPreparedListener(this);
 		mediaPlayer.setOnBufferingUpdateListener(this);
-		this.holder=holders;
-		ChangeSeekBar(holder.sb_music,holder.tv_musicPoint);
+		mediaPlayer.setOnCompletionListener(this);
+		ChangeSeekBar(holders);
 		  
 	}
 	
@@ -69,6 +71,7 @@ OnCompletionListener, OnPreparedListener{
 		if(holder!=null){
 			holder.isplay=true;
 			holder.isfirst=true;
+			holder.iv_play.setImageResource(R.drawable.play_small);
 		}
 		if (mediaPlayer != null) {   
             mediaPlayer.stop();  
@@ -86,14 +89,15 @@ OnCompletionListener, OnPreparedListener{
 		}
 	}
 	
-	public void ChangeSeekBar(SeekBar skbProgress,TextView time){
+	public void ChangeSeekBar(ViewHolder holder){
 		Stop();
-		this.time=time;
-		this.skbProgress=skbProgress;
+		this.holder=holder;
+		this.time=holder.tv_musicPoint;
+		this.skbProgress=holder.sb_music;
 		skbProgress.setOnSeekBarChangeListener(new MySeekbar());
 	}
 
-	public void Prepared(){
+	public boolean Prepared(){
 		mTimer=new Timer();
 		TimerTask mTimerTask = new TimerTask() {  
 	        @Override  
@@ -112,6 +116,7 @@ OnCompletionListener, OnPreparedListener{
 	            mediaPlayer.reset();  
 	            mediaPlayer.setDataSource(holder.musicPath);
 	            mediaPlayer.prepare();//prepare之后自动播放  
+	            
 	        } catch (IllegalArgumentException e) {  
 	            // TODO Auto-generated catch block  
 	            e.printStackTrace();  
@@ -133,7 +138,9 @@ OnCompletionListener, OnPreparedListener{
 			msgg.obj=aa;
 			msgg.what = 4;
 			MainActivity.mainHand.sendMessage(msgg);// 结果返回
+			return false;
 		 }
+		 return true;
 	}
 
 	class MySeekbar implements OnSeekBarChangeListener {  
@@ -164,7 +171,10 @@ OnCompletionListener, OnPreparedListener{
 	@Override
 	public void onCompletion(MediaPlayer arg0) {
 		// TODO Auto-generated method stub
-		
+		holder.iv_play.setImageResource(R.drawable.play_small); 
+		skbProgress.setProgress(0);  
+		holder.isplay=false;
+		//this.skbProgress.setOnSeekBarChangeListener(null);
 	}
 
 	@Override

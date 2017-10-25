@@ -8,27 +8,39 @@
         android:layout_height="fill_parent" android:layout_width="fill_parent"
         android:layout_weight="1">
 	    </SurfaceView>
+	    
     <LinearLayout android:id="@+id/LinearLayout01"  
         android:layout_height="wrap_content" 
         android:layout_width="fill_parent"  
         android:orientation="horizontal"
         android:gravity="center">  
+        <LinearLayout
+		android:layout_width="fill_parent"
+   		android:layout_height="wrap_content"
+   		android:orientation="horizontal"
+   		android:layout_weight="1"
+   		android:gravity="center"
+   		android:paddingBottom="30dp">
     <Button
         android:id="@+id/button1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:layout_marginBottom="16dp"
-        android:layout_marginRight="10dp"
         android:text="开始录音" />
-   
+   </LinearLayout>
+    <LinearLayout
+		android:layout_width="fill_parent"
+   		android:layout_height="wrap_content"
+   		android:orientation="horizontal"
+   		android:layout_weight="1"
+   		android:gravity="center"
+   		android:paddingBottom="30dp">
     <Button
         android:id="@+id/button3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:layout_marginBottom="16dp"
-        android:layout_marginLeft="10dp"
         android:text="结束录音" />  
+        </LinearLayout>
         </LinearLayout>
 </LinearLayout>

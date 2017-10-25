@@ -3,7 +3,8 @@
     android:layout_width="fill_parent"  
     android:layout_height="fill_parent"  
     android:orientation="vertical"  
-    android:background="@color/silver" > 
+    android:background="@color/silver"
+     > 
     <LinearLayout
 		android:layout_width="fill_parent"
    		android:layout_height="fill_parent"
@@ -17,6 +18,7 @@
         android:layout_margin="20dp"
         android:cacheColorHint="@android:color/darker_gray"  
         android:divider="#DCD7CF"  
+        android:background="@drawable/synthesis_main"
         android:dividerHeight="1dp"  
         android:fadingEdgeLength="0dip"  
         android:focusable="false"  
@@ -27,23 +29,42 @@
 	</LinearLayout>
 
     <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal" 
+        android:background="@color/silver">
+
+        <LinearLayout
 		android:layout_width="fill_parent"
    		android:layout_height="wrap_content"
    		android:orientation="horizontal"
-   		android:gravity="center">
+   		android:layout_weight="1"
+   		android:gravity="center"
+   		android:paddingBottom="30dp">
 
         <ImageButton
-        android:id="@+id/imgbtn_add"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/menu_show_all_audio" 
-        android:layout_marginRight="20dp"/>
+            android:id="@+id/imgbtn_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/selector_green_button"
+            android:src="@drawable/add" />
+
+        </LinearLayout>
+        <LinearLayout
+		android:layout_width="fill_parent"
+   		android:layout_height="wrap_content"
+   		android:orientation="horizontal"
+   		android:layout_weight="1"
+   		android:gravity="center"
+   		android:paddingBottom="30dp">
         <ImageButton
         android:id="@+id/imgbtn_save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/menu_save" 
-        android:layout_marginLeft="20dp"/>
-        
+        android:background="@drawable/selector_green_button"
+        android:src="@drawable/merge" 
+        />
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

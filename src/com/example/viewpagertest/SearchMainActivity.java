@@ -11,6 +11,7 @@ import java.util.TimerTask;
 
 import com.example.Record.AudioUtil;
 import com.example.ViewClass.ClearEditText;
+import com.example.ViewClass.CommomDialog;
 import com.example.ViewClass.RecordView;
 import com.example.viewpagertest.MediaFile.MediaFileType;
 import com.example.viewpagertest.R.layout;
@@ -19,6 +20,7 @@ import com.example.viewpagertest.SearchListViewAdapter.Callback;
 import android.R.color;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -36,6 +38,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.Time;
@@ -108,9 +111,18 @@ public class SearchMainActivity extends Activity implements Callback , OnItemCli
 		historyLayout=(RelativeLayout)findViewById(R.id.historyLayout);
 //		resultLayout=(LinearLayout)findViewById(R.id.resultLayout);
 		editSearch=(ClearEditText)findViewById(R.id.Editsearch);
+		editSearch.setFocusable(false);
+		editSearch.setFocusableInTouchMode(false);
+		 
 		sfl=(SwipeRefreshLayout)findViewById(R.id.srlSearch);
-		sfl.measure(0,0);
-   	 	sfl.setRefreshing(true);
+//		sfl.setOnRefreshListener(new OnRefreshListener() {
+//			
+//			@Override
+//			public void onRefresh() {
+//				// TODO Auto-generated method stub
+//				
+//			}
+//		});
    	 	listView = (ListView)findViewById(R.id.listSearch);
 //		editSearch.setOnEditorActionListener(new returnKeyDeal());\
 	   	 if(fromStr.equals("Synthesis")&&synthesisMusic.data.size()>0){
@@ -118,17 +130,23 @@ public class SearchMainActivity extends Activity implements Callback , OnItemCli
             listView.setAdapter(historyAdapter);
             listView.setOnItemClickListener(SearchMainActivity.this);
             sfl.setRefreshing(false);
+            editSearch.setFocusable(true);
+    		editSearch.setFocusableInTouchMode(true);
 		 }else{
-		 new Handler().postDelayed(new Runnable() {  
-             @Override  
-             public void run() {  
-            	 frequencyList = SeekFrequency();
-            	 historyAdapter =new SearchListViewAdapter(SearchMainActivity.this, frequencyList , SearchMainActivity.this); 
-                 listView.setAdapter(historyAdapter);
-                 listView.setOnItemClickListener(SearchMainActivity.this);
-                 sfl.setRefreshing(false);
-             }  
-         }, 1200);  
+			sfl.measure(0,0);
+     	 	sfl.setRefreshing(true);
+     	 	new Handler().postDelayed(new Runnable() {  
+	             @Override  
+	             public void run() {  
+	            	 	frequencyList = SeekFrequency();
+	            	 	historyAdapter =new SearchListViewAdapter(SearchMainActivity.this, frequencyList , SearchMainActivity.this); 
+	                    listView.setAdapter(historyAdapter);
+	                    listView.setOnItemClickListener(SearchMainActivity.this);
+	                    sfl.setRefreshing(false);
+	                    editSearch.setFocusable(true);
+	            		editSearch.setFocusableInTouchMode(true);
+	             }  
+	         }, 1200);  
 		 }
 		
 		soundAdd.setOnTouchListener(new AddSoundClick());
@@ -185,7 +203,7 @@ public class SearchMainActivity extends Activity implements Callback , OnItemCli
 
             }
         });
-
+        
 	}
 	
 	class MyHandler extends Handler {
@@ -201,6 +219,8 @@ public class SearchMainActivity extends Activity implements Callback , OnItemCli
 			case 0:
 				//soundAdd.setVisibility(View.VISIBLE);
 				soundAddLayout.setVisibility(View.VISIBLE);
+				InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);    
+		        imm.hideSoftInputFromWindow(editSearch.getWindowToken(), 0) ;  
 				break;
 			case 1:
 				//soundAdd.setVisibility(View.GONE);
@@ -537,9 +557,22 @@ public class SearchMainActivity extends Activity implements Callback , OnItemCli
 	@Override
 	public void click(View v) {
 		// TODO Auto-generated method stub
+		final int index=Integer.parseInt(v.getTag().toString());
 		if(soundAddLayout.getVisibility()==View.GONE){
-			frequencyList.remove(Integer.parseInt(v.getTag().toString()));
-			historyAdapter.notifyDataSetChanged();
+			new CommomDialog(SearchMainActivity.this, R.style.dialog, "确定删除该文件？", new CommomDialog.OnCloseListener() {
+				@Override
+				public void onClick(Dialog dialog, boolean confirm) {
+					// TODO Auto-generated method stub
+					File ff =new File(frequencyList.get(index));
+					if(ff.exists()){
+						ff.delete();
+					}
+					frequencyList.remove(index);
+					historyAdapter.notifyDataSetChanged();
+			        
+				}
+			}).setTitle("提示").show();
+			
 		}
 		
 	}

@@ -16,29 +16,30 @@
 	  android:layout_height="wrap_content"
 	  android:layout_width="fill_parent"
 	  android:paddingRight="10dp"
-	  android:background="#cc0000"
+	  android:background="@color/topcolor"
 	   >
 	  
 	    <LinearLayout  
         android:id="@+id/linearLayout1"  
         android:layout_width="40dp"  
         android:layout_height="40dp"  
-
+		
          >  
 		    <ImageView  
 		        android:id="@+id/imgUser"
 		        android:layout_width="fill_parent"  
 		        android:layout_height="fill_parent"  
-		        android:src="@drawable/tempp" 
+		        android:src="@drawable/category" 
 	        />  
 	    </LinearLayout>
 	  <LinearLayout  
         android:layout_width="fill_parent"  
         android:layout_height="wrap_content"  
-		
+		android:layout_weight="1.0"  
+		android:orientation="horizontal"
          >
-
-  
+ 
+  <!-- 
         <TextView  
             android:id="@+id/text1"  
             android:layout_width="fill_parent"  
@@ -49,7 +50,7 @@
             android:layout_marginRight="20dp"
             android:textColor="#8FFFFF"  
             android:textSize="18.0dip" />  
-  
+
         <TextView  
             android:id="@+id/text2"  
             android:layout_width="fill_parent"  
@@ -60,7 +61,27 @@
             android:layout_marginLeft="20dp"
             android:textColor="#4FFFFF"  
             android:textSize="18.0dip" />  
-  
+  -->
+  		
+  		<ImageView  
+		    android:id="@+id/text1"
+		    android:layout_width="fill_parent"  
+            android:layout_height="40dp"
+            android:layout_weight="1.0"  
+            android:gravity="right"  
+            android:paddingLeft="50dp"
+		    android:src="@drawable/music" 
+		    />
+  		<ImageView  
+		    android:id="@+id/text2"
+		    android:layout_width="fill_parent"  
+            android:layout_height="40dp"
+            android:layout_weight="1.0"  
+            android:gravity="left"  
+            android:paddingRight="50dp"
+		    android:src="@drawable/friends" 
+		    />
+  		
     </LinearLayout>  
    
 	</android.support.v7.widget.Toolbar>
@@ -76,7 +97,7 @@
           </LinearLayout>
     <!--侧滑菜单-->
     <LinearLayout
-        android:layout_width="300dp"
+        android:layout_width="255dp"
         android:layout_height="match_parent"
         android:background="#fff"
     	android:orientation="vertical"
@@ -87,7 +108,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical" 
-        android:background="#cc0000"
+        android:background="@color/topcolor"
         android:layout_weight="7" 
         android:gravity="bottom"
           >

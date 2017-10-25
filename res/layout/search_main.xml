@@ -13,14 +13,14 @@
 	  android:layout_height="wrap_content"
 	  android:layout_width="fill_parent"
 	  android:paddingRight="10dp"
-	  android:background="#cc0000"
+	  android:background="@color/topcolor"
 	   >
 	   	
       	<ImageView
         android:id="@+id/searchImageExit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/abc_btn_switch_to_on_mtrl_00012" 
+        android:src="@drawable/back" 
         android:paddingRight="10dp"
         />
         <com.example.ViewClass.ClearEditText
@@ -29,7 +29,7 @@
 	        android:layout_height="wrap_content"
 	        android:hint="暂无数据..."
 	        android:theme="@style/MyEditText"
-	        android:drawableRight="@+drawable/abc_btn_check_material"
+	        android:drawableRight="@+drawable/record"
 	        android:singleLine="true"
 	        android:imeOptions="actionSearch"
 	        android:background="@drawable/edit_tool_line"
@@ -67,8 +67,8 @@
 		    >
 		    <com.example.ViewClass.RecordView
 		        android:id="@+id/recordView"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
+		        android:layout_width="300dp"
+		        android:layout_height="300dp"
 		        record_view:model="play_model"
 		        android:layout_centerHorizontal="true" 
 		        android:layout_centerInParent="true"

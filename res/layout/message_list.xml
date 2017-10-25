@@ -92,14 +92,16 @@
 
             <ImageView
                 android:id="@+id/iv_play"
+                android:layout_gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/abc_btn_radio_to_on_mtrl_015" />
+                android:src="@drawable/play_small" />
 
         <SeekBar    
             android:id="@+id/sb_music"  
             android:layout_width="fill_parent"  
             android:layout_height="wrap_content"  
+            android:layout_gravity="center"
             android:layout_weight="1"
             android:visibility="visible"  
              />  
@@ -165,7 +167,8 @@
                 android:layout_alignParentRight="true"  
                 android:layout_marginRight="40dp"
                 android:gravity="center"  
-                android:orientation="horizontal" >  
+                android:orientation="horizontal"
+                android:visibility="gone" >  
   
                 <ImageView  
                     android:layout_width="24dip"  

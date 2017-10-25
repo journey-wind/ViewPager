@@ -871,10 +871,10 @@ public class DrawWaveForm extends View
     
     private void enableDisableButtons() {
     	if (mIsPlaying) {
-            mPlayButton.setImageResource(android.R.drawable.ic_media_pause);
+            mPlayButton.setImageResource(R.drawable.pause);
             mPlayButton.setContentDescription(getResources().getText(R.string.stop));
         } else {
-            mPlayButton.setImageResource(android.R.drawable.ic_media_play);
+            mPlayButton.setImageResource(R.drawable.play);
             mPlayButton.setContentDescription(getResources().getText(R.string.play));
         }
     }

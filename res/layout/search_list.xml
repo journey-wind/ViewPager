@@ -52,8 +52,9 @@
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:layout_marginTop="0dp"
+        android:layout_marginRight="5dp"
         android:scaleType="center"
-        android:src="@drawable/@android:drawable/ic_menu_sort_by_size" 
+        android:src="@drawable/close" 
         />
 
     

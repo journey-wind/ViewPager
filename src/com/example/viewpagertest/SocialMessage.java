@@ -43,7 +43,7 @@ public class SocialMessage implements OnItemClickListener, com.example.viewpager
 	public static ArrayList<MsgTypeUtil> data;
 	public static ImageView msgAdd;
 	public static Handler socialHandl;
-	private String baseMusicPath = "http://192.168.1.103/music/";
+	private String baseMusicPath = "http://192.168.1.116/music/";
 	public static MySwipeRefresh swipeRefreshView;
 	public static SocThread socketTh;
 	DateFormat df;
@@ -306,21 +306,27 @@ public class SocialMessage implements OnItemClickListener, com.example.viewpager
 		final ViewHolder holder=(ViewHolder)v.getTag();
 		if(holder.musicPath!=null || holder.musicPath!=""){
 			if(holder.isfirst){
-				int t = Integer.parseInt(data.get(holder.index).lisenNum.toString());
-				t++;
-				data.get(holder.index).lisenNum=String.valueOf(t);
-				msgAdapter.RefreshAndSave();
-				sendListenNum(holder.time);
-				holder.isplay=true;
 				//MediaPlayerUtil.getInstance(holder.sb_music,holder.tv_musicPoint);
 				MediaPlayerUtil.getInstance(holder);
-				MediaPlayerUtil.mInstance.Prepared();
-
-				holder.isfirst=false;
+				holder.iv_play.setImageResource(R.drawable.pause_small);
+				if(MediaPlayerUtil.mInstance.Prepared()){
+					int t = Integer.parseInt(data.get(holder.index).lisenNum.toString());
+					t++;
+					data.get(holder.index).lisenNum=String.valueOf(t);
+					msgAdapter.RefreshAndSave();
+					sendListenNum(holder.time);
+					holder.isplay=true;
+					holder.isfirst=false;
+				}else{
+					holder.iv_play.setImageResource(R.drawable.play_small);
+				}
+				
 			}else if(holder.isplay){
 				MediaPlayerUtil.mInstance.mediaPlayer.pause();
+				holder.iv_play.setImageResource(R.drawable.play_small);
 				holder.isplay=false;
 			}else if(!holder.isplay){
+				holder.iv_play.setImageResource(R.drawable.pause_small);
 				MediaPlayerUtil.mInstance.mediaPlayer.start();
 				holder.isplay=true;
 			}

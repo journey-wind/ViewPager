@@ -55,6 +55,8 @@
         android:id="@+id/imgbtn_delete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/abc_btn_radio_to_on_mtrl_000" 
+        android:background="@null"
+        android:src="@drawable/delete" 
+        android:layout_marginTop="4dp"
         android:layout_marginRight="6dp"/>
 </LinearLayout>

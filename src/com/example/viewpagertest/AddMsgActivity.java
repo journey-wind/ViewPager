@@ -81,8 +81,7 @@ public class AddMsgActivity extends Activity {
 						
 				        
 					}
-				})
-				        .setTitle("提示").show();
+				}).setTitle("提示").show();
 				
 				
 			}
