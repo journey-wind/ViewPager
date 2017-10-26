@@ -24,7 +24,9 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.text.Editable;
 import android.text.SpannableString;
+import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
 import android.util.AttributeSet;
@@ -222,9 +224,9 @@ public class DrawWaveForm extends View
         mMarkerBottomOffset = (int)(10 * mDensity);
 
         mStartText = (EditText)view.findViewById(R.id.et_start);
-//        mStartText.addTextChangedListener(mTextWatcher);
+        mStartText.addTextChangedListener(mTextWatcher);
         mEndText = (EditText)view.findViewById(R.id.et_end);
-//        mEndText.addTextChangedListener(mTextWatcher);
+        mEndText.addTextChangedListener(mTextWatcher);
         
         mTitleText = (TextView)view.findViewById(R.id.titleText);
         
@@ -354,6 +356,37 @@ public class DrawWaveForm extends View
 			saveRingtone();
 		}
 	};
+	
+	private TextWatcher mTextWatcher = new TextWatcher() {
+        public void beforeTextChanged(CharSequence s, int start,
+                                      int count, int after) {
+        }
+
+        public void onTextChanged(CharSequence s,
+                                  int start, int before, int count) {
+        }
+
+        public void afterTextChanged(Editable s) {
+            if (mStartText.hasFocus()) {
+                try {
+                    mStartPos = mWaveformView.secondsToPixels(
+                        Double.parseDouble(
+                            mStartText.getText().toString()));
+                    updateDisplay();
+                } catch (NumberFormatException e) {
+                }
+            }
+            if (mEndText.hasFocus()) {
+                try {
+                    mEndPos = mWaveformView.secondsToPixels(
+                        Double.parseDouble(
+                            mEndText.getText().toString()));
+                    updateDisplay();
+                } catch (NumberFormatException e) {
+                }
+            }
+        }
+    };
 
 	private void saveRingtone() {
 		final String title = saveFileName.getText().toString() ;

@@ -571,7 +571,7 @@ public class SearchMainActivity extends Activity implements Callback , OnItemCli
 					historyAdapter.notifyDataSetChanged();
 			        
 				}
-			}).setTitle("ÌבÊ¾").show();
+			}).show();
 			
 		}
 		

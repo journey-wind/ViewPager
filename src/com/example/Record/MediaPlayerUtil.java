@@ -117,22 +117,12 @@ OnCompletionListener, OnPreparedListener{
 	            mediaPlayer.setDataSource(holder.musicPath);
 	            mediaPlayer.prepare();//prepare之后自动播放  
 	            
-	        } catch (IllegalArgumentException e) {  
+	        } catch (Exception e) {  
 	            // TODO Auto-generated catch block  
 	            e.printStackTrace();  
 	            aa=e.getMessage();
 	            isError=true;
-	        } catch (IllegalStateException e) {  
-	            // TODO Auto-generated catch block  
-	            e.printStackTrace();  
-	            aa=e.getMessage();
-	            isError=true;
-	        } catch (IOException e) {  
-	            // TODO Auto-generated catch block  
-	            e.printStackTrace();  
-	            aa=e.getMessage();
-	            isError=true;
-	        }  
+	        }
 		 if(isError){
 			 Message msgg = MainActivity.mainHand.obtainMessage();
 			msgg.obj=aa;

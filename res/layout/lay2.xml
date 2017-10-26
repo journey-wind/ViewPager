@@ -145,6 +145,7 @@
         <EditText android:id="@+id/et_start"
            android:textSize="11sp"
 	   	   android:layout_marginTop="5dip"
+	   	   android:singleLine="true"
            android:layout_width="60dip"
            android:layout_height="31dip"
            android:contentDescription="@string/start_label" />
@@ -152,6 +153,7 @@
         <EditText android:id="@+id/et_end"
            android:textSize="11sp"
            android:layout_width="60dip"
+           android:singleLine="true"
            android:layout_height="31dip"
            android:contentDescription="@string/end_label" />
 
