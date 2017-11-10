@@ -6,8 +6,105 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FilterInputStream;
 import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.util.ArrayList;
 
 public class CaoZuoWavUtils {
+	public static ArrayList<byte[]> fenLiData(String path){  
+		 ArrayList<byte[]> data=new ArrayList<byte[]>();
+		byte[] temp = null;
+		try {
+			FileInputStream fisone = new FileInputStream(path);
+			fisone.read(temp, 0, 44);
+			byte bs[]=new byte[1024*4];  
+		    int len=0;  
+		    //先读第一个  
+		    while((len=fisone.read(bs))!=-1){  
+		    	data.add(bs);
+		    }  
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return data;
+		
+	}  
+	
+	
+	public static ArrayList<byte[]> fenLiPathData(String path){  
+		 ArrayList<byte[]> data=new ArrayList<byte[]>();
+		byte[] temp = new byte[4];
+		FileInputStream fisone = null;
+		byte[] bs;
+		try {
+			fisone = new FileInputStream(path);
+			//fisone.read(temp, 0, 44);
+			bs=new byte[1024*4];
+		    int len=0;
+		    fisone.skip(44);
+		    //fisone.read(temp,0,4);
+		    while(fisone.read(bs,0,4096)!=-1){  
+		    	data.add(bs);
+		    	bs=new byte[1024*4];  
+		    }  
+		    
+//			long channels=bytesToInt2(temp,22);
+//			long longSampleRate=bytesToInt(temp,24);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			try {
+				if(fisone!=null)
+					fisone.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		return data;
+		
+	}  
+	
+	public static void convertWaveFile(String path,ArrayList<byte[]> musicPCMone,long longSampleRate,int channels) {
+        FileOutputStream out = null;
+        long totalAudioLen = 0;
+        long totalDataLen = totalAudioLen + 36;
+        long byteRate = 16 *longSampleRate * channels / 8;
+        byte[] data = new byte[4096];
+        try { 
+        	String outFileName=path;
+			//            in = new FileInputStream(inFileName);
+            out = new FileOutputStream(outFileName);
+            int sum=0;
+            for(int i=0;i<musicPCMone.size()-1;i++){
+            	sum+=musicPCMone.get(i).length;
+            }
+            totalAudioLen = sum;
+            //由于不包括RIFF和WAV
+            totalDataLen = totalAudioLen + 36;
+            WriteWaveFileHeader(out, totalAudioLen, totalDataLen, longSampleRate, channels, byteRate);
+            int index=0;
+            while (index<musicPCMone.size()) {
+                out.write(musicPCMone.get(index++));
+                out.flush();
+            }
+            out.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+    }
+	
 	public static String fenLiData(String path,String path1,String name) throws IOException {
 		// TODO Auto-generated method stub
 		FileInputStream fisone=null;

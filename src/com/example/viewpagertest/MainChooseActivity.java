@@ -41,7 +41,7 @@ public class MainChooseActivity extends ViewGroup {
 	private ViewPager mPager;//页卡内容
     private List<View> listViews; // Tab页面列表
     private ImageView cursor;// 动画图片
-    private TextView t1, t2, t3;// 页卡头标
+    private TextView t1, t2, t3,t4;// 页卡头标
     private int offset = 0;// 动画图片偏移量
     private int currIndex = 0;// 当前页卡编号
     private int bmpW;// 动画图片宽度
@@ -69,6 +69,7 @@ public class MainChooseActivity extends ViewGroup {
 		 t1=new TextView(context);
 		 t2=new TextView(context);
 		 t3=new TextView(context);
+		 t4=new TextView(context);
 		 LinearLayout lly1=new LinearLayout(context);
 		 LinearLayout lly2=new LinearLayout(context);
 		 
@@ -80,13 +81,16 @@ public class MainChooseActivity extends ViewGroup {
 	private void InitTextView() {   
 		t1 = (TextView) view.findViewById(R.id.text4);   
 		t2 = (TextView) view.findViewById(R.id.text5);   
-		t3 = (TextView) view.findViewById(R.id.text6);   
+		t3 = (TextView) view.findViewById(R.id.text6);  
+		t4 = (TextView) view.findViewById(R.id.text7);   
 		t1.setTextColor(getResources().getColor(R.color.topcolor));
 		t2.setTextColor(getResources().getColor(R.color.silver2));
 		t3.setTextColor(getResources().getColor(R.color.silver2));
+		t4.setTextColor(getResources().getColor(R.color.silver2));
 		t1.setOnClickListener(new MyOnClickListener(0));   
 		t2.setOnClickListener(new MyOnClickListener(1));   
 		t3.setOnClickListener(new MyOnClickListener(2));   
+		t4.setOnClickListener(new MyOnClickListener(3));   
 	}  
 	
 
@@ -98,6 +102,7 @@ public class MainChooseActivity extends ViewGroup {
 		listViews.add(mInflater.inflate(R.layout.lay1, null));
 		listViews.add(mInflater.inflate(R.layout.lay2, null));
 		listViews.add(mInflater.inflate(R.layout.lay3, null));
+		listViews.add(mInflater.inflate(R.layout.lay4, null));
 		mPager.setAdapter(new MyPagerAdapter(listViews));   
 		mPager.setCurrentItem(0);  
 		String path = MainActivity.firstMisicPath;
@@ -105,6 +110,7 @@ public class MainChooseActivity extends ViewGroup {
 		RecordPlay tt =new RecordPlay(listViews.get(0));
 		dwf =new DrawWaveForm(listViews.get(1).getContext(), null,listViews.get(1),path);
 		synthesisMusic sm=new synthesisMusic(listViews.get(2).getContext(),listViews.get(2));
+		MusicMix mm=new MusicMix(listViews.get(3).getContext(),listViews.get(3));
 		//t2 =new DrawWaveForm(listViews.get(1).getContext(), null,listViews.get(1),"/storage/emulated/0/bbbb.mp3");
 		mPager.setOnPageChangeListener(new MyOnPageChangeListener()); 
 		
@@ -120,9 +126,9 @@ public class MainChooseActivity extends ViewGroup {
 		int screenW = dm.widthPixels;// 获取分辨率宽度   
 		LayoutParams para;
         para = cursor.getLayoutParams();
-        para.width = screenW / 3-10;
+        para.width = screenW / 4-10;
         cursor.setLayoutParams(para);
-		offset = (screenW / 3 - bmpW) / 2;// 计算偏移量   
+		offset = (screenW / 4 - bmpW) / 2;// 计算偏移量   
 		Matrix matrix = new Matrix();   
 		matrix.postTranslate(offset, 0);   
 		cursor.setImageMatrix(matrix);// 设置动画初始位置   
@@ -149,6 +155,7 @@ public class MainChooseActivity extends ViewGroup {
 
 			int one = offset * 2 + bmpW;// 页卡1 -> 页卡2 偏移量   
 			int two = one * 2;// 页卡1 -> 页卡3 偏移量   
+			int three = one * 3;
 			
 			@Override
 			public void onPageScrollStateChanged(int arg0) {
@@ -172,6 +179,8 @@ public class MainChooseActivity extends ViewGroup {
 				animation = new TranslateAnimation(one, 0, 0, 0);   
 				} else if (currIndex == 2) {   
 				animation = new TranslateAnimation(two, 0, 0, 0);   
+				} else if (currIndex == 3) {   
+				animation = new TranslateAnimation(three, 0, 0, 0);   
 				}   
 				break;   
 				case 1:   
@@ -179,15 +188,28 @@ public class MainChooseActivity extends ViewGroup {
 				animation = new TranslateAnimation(offset, one, 0, 0);   
 				} else if (currIndex == 2) {   
 				animation = new TranslateAnimation(two, one, 0, 0);   
-				}   
+				} else if (currIndex == 3) {   
+				animation = new TranslateAnimation(three, one, 0, 0);   
+				}  
 				break;   
 				case 2:   
 				if (currIndex == 0) {   
 				animation = new TranslateAnimation(offset, two, 0, 0);   
 				} else if (currIndex == 1) {   
 				animation = new TranslateAnimation(one, two, 0, 0);   
-				}   
-				break;   
+				} else if (currIndex == 3) {   
+				animation = new TranslateAnimation(three, two, 0, 0);   
+				}  
+				break; 
+				case 3:   
+				if (currIndex == 0) {   
+				animation = new TranslateAnimation(offset, three, 0, 0);   
+				} else if (currIndex == 1) {   
+				animation = new TranslateAnimation(one, three, 0, 0);   
+				} else if (currIndex == 2) {   
+				animation = new TranslateAnimation(two, three, 0, 0);   
+				}  
+				break;
 				}   
 				currIndex = arg0;   
 				animation.setFillAfter(true);// True:图片停在动画结束位置   
@@ -199,14 +221,23 @@ public class MainChooseActivity extends ViewGroup {
 					t1.setTextColor(getResources().getColor(R.color.topcolor));
 					t2.setTextColor(getResources().getColor(R.color.silver2));
 					t3.setTextColor(getResources().getColor(R.color.silver2));
+					t4.setTextColor(getResources().getColor(R.color.silver2));
 					break;
 				case 1:
 					t2.setTextColor(getResources().getColor(R.color.topcolor));
 					t1.setTextColor(getResources().getColor(R.color.silver2));
 					t3.setTextColor(getResources().getColor(R.color.silver2));
+					t4.setTextColor(getResources().getColor(R.color.silver2));
 					break;
 				case 2:
 					t3.setTextColor(getResources().getColor(R.color.topcolor));
+					t2.setTextColor(getResources().getColor(R.color.silver2));
+					t1.setTextColor(getResources().getColor(R.color.silver2));
+					t4.setTextColor(getResources().getColor(R.color.silver2));
+					break;
+				case 3:
+					t4.setTextColor(getResources().getColor(R.color.topcolor));
+					t3.setTextColor(getResources().getColor(R.color.silver2));
 					t2.setTextColor(getResources().getColor(R.color.silver2));
 					t1.setTextColor(getResources().getColor(R.color.silver2));
 					break;

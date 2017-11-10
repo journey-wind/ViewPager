@@ -67,6 +67,26 @@ import android.widget.ZoomControls;
 
 public class SearchMainActivity extends Activity implements Callback , OnItemClickListener{
 
+	@Override
+	public void onWindowFocusChanged(boolean hasFocus) {
+		// TODO Auto-generated method stub
+		super.onWindowFocusChanged(hasFocus);
+		sfl.setRefreshing(true);
+		new Handler().postDelayed(new Runnable() {  
+            @Override  
+            public void run() {  
+           	 	frequencyList = SeekFrequency();
+           	 	historyAdapter =new SearchListViewAdapter(SearchMainActivity.this, frequencyList , SearchMainActivity.this); 
+                   listView.setAdapter(historyAdapter);
+                   listView.setOnItemClickListener(SearchMainActivity.this);
+                   sfl.setRefreshing(false);
+                   editSearch.setFocusable(true);
+           		editSearch.setFocusableInTouchMode(true);
+           		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);    
+		        imm.hideSoftInputFromWindow(editSearch.getWindowToken(), 0) ;
+            }  
+        }, 1200);  
+	}
 	public static Handler hand;
 	//private TimerCal timerT;
 	private Thread MyThread;
@@ -125,30 +145,14 @@ public class SearchMainActivity extends Activity implements Callback , OnItemCli
 //		});
    	 	listView = (ListView)findViewById(R.id.listSearch);
 //		editSearch.setOnEditorActionListener(new returnKeyDeal());\
-	   	 if(fromStr.equals("Synthesis")&&synthesisMusic.data.size()>0){
+	   	 if(frequencyList!=null&&frequencyList.size()>0){
 	   		historyAdapter =new SearchListViewAdapter(SearchMainActivity.this, frequencyList , SearchMainActivity.this); 
             listView.setAdapter(historyAdapter);
             listView.setOnItemClickListener(SearchMainActivity.this);
-            sfl.setRefreshing(false);
-            editSearch.setFocusable(true);
-    		editSearch.setFocusableInTouchMode(true);
 		 }else{
-			sfl.measure(0,0);
-     	 	sfl.setRefreshing(true);
-     	 	new Handler().postDelayed(new Runnable() {  
-	             @Override  
-	             public void run() {  
-	            	 	frequencyList = SeekFrequency();
-	            	 	historyAdapter =new SearchListViewAdapter(SearchMainActivity.this, frequencyList , SearchMainActivity.this); 
-	                    listView.setAdapter(historyAdapter);
-	                    listView.setOnItemClickListener(SearchMainActivity.this);
-	                    sfl.setRefreshing(false);
-	                    editSearch.setFocusable(true);
-	            		editSearch.setFocusableInTouchMode(true);
-	             }  
-	         }, 1200);  
+			//sfl.measure(0,0);
 		 }
-		
+	   	
 		soundAdd.setOnTouchListener(new AddSoundClick());
         editSearch.addTextChangedListener(new TextWatcher() {
 			
@@ -558,17 +562,19 @@ public class SearchMainActivity extends Activity implements Callback , OnItemCli
 	public void click(View v) {
 		// TODO Auto-generated method stub
 		final int index=Integer.parseInt(v.getTag().toString());
-		if(soundAddLayout.getVisibility()==View.GONE){
+		if(soundAddLayout.getVisibility()==View.GONE|| sfl.isRefreshing()){
 			new CommomDialog(SearchMainActivity.this, R.style.dialog, "确定删除该文件？", new CommomDialog.OnCloseListener() {
 				@Override
 				public void onClick(Dialog dialog, boolean confirm) {
 					// TODO Auto-generated method stub
-					File ff =new File(frequencyList.get(index));
-					if(ff.exists()){
-						ff.delete();
+					if(confirm){
+						File ff =new File(frequencyList.get(index));
+						if(ff.exists()){
+							ff.delete();
+						}
+						frequencyList.remove(index);
+						historyAdapter.notifyDataSetChanged();
 					}
-					frequencyList.remove(index);
-					historyAdapter.notifyDataSetChanged();
 			        
 				}
 			}).show();
@@ -591,18 +597,29 @@ public class SearchMainActivity extends Activity implements Callback , OnItemCli
             msg.setData(b);
         	AddMsgActivity.selectHand.sendMessage(msg);
         }else if(fromStr.equals("Synthesis")){
-        	Message msg = MainActivity.mainHand.obtainMessage();
+        	Message msg = synthesisMusic.myHander.obtainMessage();
         	msg.obj=index;
 			msg.what = 1;
 			synthesisMusic.myHander.sendMessage(msg);// 结果返回
+        }else if(fromStr.equals("MixOne")){
+        	Message msg = MainActivity.mainHand.obtainMessage();
+        	msg.obj=index;
+			msg.what = 1;
+			MusicMix.myHander.sendMessage(msg);// 结果返回
+        }else if(fromStr.equals("MixTwo")){
+        	Message msg = MusicMix.myHander.obtainMessage();
+        	msg.obj=index;
+			msg.what = 2;
+			MusicMix.myHander.sendMessage(msg);// 结果返回
         }
 	}
 
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 		// TODO Auto-generated method stub
-		if(soundAddLayout.getVisibility()==View.GONE){
+		if(soundAddLayout.getVisibility()==View.GONE || sfl.isRefreshing()){
 			MainActivity.firstMisicPath=frequencyList.get(arg2);
+			arg1.setBackgroundColor(getResources().getColor(R.color.silver));
 			SendToChoose(arg2);
 			this.finish();
 		}

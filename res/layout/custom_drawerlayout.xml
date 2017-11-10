@@ -69,7 +69,7 @@
             android:layout_height="40dp"
             android:layout_weight="1.0"  
             android:gravity="right"  
-            android:paddingLeft="50dp"
+            android:paddingLeft="45dp"
 		    android:src="@drawable/music" 
 		    />
   		<ImageView  
@@ -78,7 +78,7 @@
             android:layout_height="40dp"
             android:layout_weight="1.0"  
             android:gravity="left"  
-            android:paddingRight="50dp"
+            android:paddingRight="45dp"
 		    android:src="@drawable/friends" 
 		    />
   		

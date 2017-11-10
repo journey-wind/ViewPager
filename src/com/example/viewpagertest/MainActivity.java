@@ -235,6 +235,35 @@ public class MainActivity extends ActionBarActivity {
 				Toast.makeText(getApplicationContext(), "拼接成功,文件地址："+aa, Toast.LENGTH_SHORT).show();
 			}else if(msg.what == 12){
 				Toast.makeText(getApplicationContext(), "拼接失败", Toast.LENGTH_SHORT).show();
+			}else if(msg.what == 13){
+				Intent intent = new Intent(); 
+			     intent.setClass(MainActivity.this, SearchMainActivity.class);
+			     intent.putExtra("from", "MixOne");
+		         startActivity(intent);  
+			}
+			else if(msg.what == 14){
+				Intent intent = new Intent(); 
+			     intent.setClass(MainActivity.this, SearchMainActivity.class);
+			     intent.putExtra("from", "MixTwo");
+		         startActivity(intent);  
+			}else if(msg.what == 15){
+				boolean vis =(boolean)msg.obj;
+				if(vis){
+					Toast.makeText(getApplicationContext(), "第一个音频文件解析完成", Toast.LENGTH_SHORT).show();
+				}else{
+					Toast.makeText(getApplicationContext(), "第一个音频文件解析失败", Toast.LENGTH_SHORT).show();
+				}
+			}else if(msg.what == 16){
+				boolean vis =(boolean)msg.obj;
+				if(vis){
+					Toast.makeText(getApplicationContext(), "第二个音频文件解析完成", Toast.LENGTH_SHORT).show();
+				}else{
+					Toast.makeText(getApplicationContext(), "第二个音频文件解析失败", Toast.LENGTH_SHORT).show();
+				}
+			}else if(msg.what == 17){
+				Toast.makeText(getApplicationContext(), "2个文件频率、声道数不一样", Toast.LENGTH_SHORT).show();
+			}else if(msg.what == 18){
+				Toast.makeText(getApplicationContext(), "混音完成", Toast.LENGTH_SHORT).show();
 			}
 			
 			super.handleMessage(msg);

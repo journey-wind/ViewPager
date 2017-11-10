@@ -76,8 +76,9 @@ public class AddMsgActivity extends Activity {
 					@Override
 					public void onClick(Dialog dialog, boolean confirm) {
 						// TODO Auto-generated method stub
-						
-						sendAndTosat(dialog);
+						if(confirm){
+							sendAndTosat(dialog);
+						}
 						
 				        
 					}
@@ -176,7 +177,7 @@ public class AddMsgActivity extends Activity {
 		
 		
 		if(!MainActivity.msgServer.sendMsg(str)){
-			
+			loading.dismiss();
 			Message msg = MainActivity.mainHand.obtainMessage();
 			msg.obj = null;
 			msg.what = 1;

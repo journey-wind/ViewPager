@@ -130,6 +130,7 @@ public class synthesisMusic implements Callback {
 					break;
 				}
 				
+				
 				File filed=new File(oldtemp);  
 		           if(filed.exists())  
 		                filed.delete();

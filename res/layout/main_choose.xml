@@ -42,6 +42,15 @@
 	            android:text="音频拼接"  
 	            android:textColor="#707070"  
 	            android:textSize="16.0dip" />  
+	        <TextView  
+	            android:id="@+id/text7"  
+	            android:layout_width="fill_parent"  
+	            android:layout_height="wrap_content"  
+	            android:layout_weight="1.0"  
+	            android:gravity="center"  
+	            android:text="音频混合"  
+	            android:textColor="#707070"  
+	            android:textSize="16.0dip" />  
 	    </LinearLayout>  
 	    
 	     <ImageView  

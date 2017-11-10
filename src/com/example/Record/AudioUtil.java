@@ -23,7 +23,7 @@ public class AudioUtil {
     //录音源
     private static int audioSource = MediaRecorder.AudioSource.MIC;
     //录音的采样频率
-    private static int audioRate = 8000;
+    private static int audioRate = 44100;
     //录音的声道，单声道
     private static int audioChannel = AudioFormat.CHANNEL_CONFIGURATION_MONO;
     //量化的深度
@@ -158,6 +158,8 @@ public class AudioUtil {
   
         }  
     }
+    
+    
 
     /*
     任何一种文件在头部添加相应的头文件才能够确定的表示这种文件的格式，wave是RIFF文件结构，每一部分为一个chunk，其中有RIFF WAVE chunk，
