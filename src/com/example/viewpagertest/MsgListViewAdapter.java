@@ -45,6 +45,7 @@ public class MsgListViewAdapter extends BaseAdapter implements OnClickListener{
 	    public int index;
 	    public boolean isplay;
 	    public boolean isfirst;
+	    public String musicMk;
 	}
 	private ArrayList<MsgTypeUtil> data;
 	private LayoutInflater mInflater=null;
@@ -141,6 +142,7 @@ public class MsgListViewAdapter extends BaseAdapter implements OnClickListener{
 	    //holder.iv_head.setVisibility(View.GONE);
 	    //holder.sb_music.setVisibility(View.GONE);
 	    String timeStr=compareToNowDate(data.get(arg0).time);
+	    holder.musicMk=data.get(arg0).musicMk;
 	    holder.time=data.get(arg0).time;
 	    String minute="00";
 	    String second="00";

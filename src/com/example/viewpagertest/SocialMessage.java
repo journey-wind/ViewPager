@@ -188,7 +188,8 @@ public class SocialMessage implements OnItemClickListener, com.example.viewpager
 					}
 					if(i==data.size()){
 					mtu =new MsgTypeUtil(music[1], music[0], music[2].trim(), 
-							music[5], music[5], null, baseMusicPath+music[3].trim(),music[4].trim());
+							music[5], music[5], null, baseMusicPath+music[3].trim(),
+							music[4].trim(),music[6]);
 					data.add(0, mtu);
 					sum++;
 					}
@@ -248,7 +249,8 @@ public class SocialMessage implements OnItemClickListener, com.example.viewpager
 					}
 					if(i==data.size()){
 					mtu =new MsgTypeUtil(music[1], music[0], music[2].trim(), 
-							music[5], music[5], null, baseMusicPath+music[3].trim(),music[4].trim());
+							music[5], music[5], null, baseMusicPath+music[3].trim(),
+							music[4].trim(),music[6]);
 					data.add(0, mtu);
 					sum++;
 					}
@@ -289,8 +291,8 @@ public class SocialMessage implements OnItemClickListener, com.example.viewpager
 		
 	}
 
-	private void sendListenNum(String time){
-		String str="Listen:"+time;
+	private void sendListenNum(String Mk){
+		String str="Listen:"+Mk;
 		if(!MainActivity.msgServer.sendMsg(str)){
 			Message msg = MainActivity.mainHand.obtainMessage();
 			msg.obj = null;
@@ -314,7 +316,7 @@ public class SocialMessage implements OnItemClickListener, com.example.viewpager
 					t++;
 					data.get(holder.index).lisenNum=String.valueOf(t);
 					msgAdapter.RefreshAndSave();
-					sendListenNum(holder.time);
+					sendListenNum(holder.musicMk);
 					holder.isplay=true;
 					holder.isfirst=false;
 				}else{
